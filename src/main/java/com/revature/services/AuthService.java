@@ -28,6 +28,7 @@ public class AuthService {
      * </ul>
      */
     public User login(String username, String password) {
+
         return null;
     }
 
@@ -45,6 +46,8 @@ public class AuthService {
      * After registration, the id will be a positive integer.
      */
     public User register(User userToBeRegistered) {
+
+
         return null;
     }
 

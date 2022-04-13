@@ -75,14 +75,13 @@ public class UserDAO {
             PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(SQL);
             preparedStatement.setInt(1, userToBeRegistered.getId());
             preparedStatement.setString(2,userToBeRegistered.getUsername());
-            preparedStatement.setString(2,userToBeRegistered.getPassword());
             preparedStatement.setString(3,userToBeRegistered.getPassword());
             preparedStatement.setString(4,userToBeRegistered.getFirst());
             preparedStatement.setString(5, userToBeRegistered.getLast());
             preparedStatement.setString(6, userToBeRegistered.getEmail());
-            preparedStatement.setInt(7, userToBeRegistered.getId());
+            preparedStatement.setInt(7, 2);
 
-            ResultSet rs = preparedStatement.executeQuery();
+            preparedStatement.executeUpdate();
             //next has to be called. it is a boolean. if there is something there it returns true and false if not
 
         }catch (SQLException e){

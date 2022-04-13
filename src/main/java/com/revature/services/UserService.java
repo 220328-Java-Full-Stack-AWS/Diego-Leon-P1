@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
+import java.util.Random;
+import java.util.Scanner;
 
 import com.revature.models.User;
 import com.revature.repositories.UserDAO;
@@ -41,9 +43,6 @@ public class UserService {
 	public Optional<Object> getByUsername(String username) throws SQLException, IOException {
 		UserDAO user = new UserDAO();
 		Optional<User> model = user.getByUsername(username);
-//		model.get().getUsername();
-//		model.get().getId();
-//		model.get().getPassword();
 
 		System.out.println("ID: "+ model.get().getId() + "\nUsername: : " + model.get().getUsername() + "\nPassword: " + model.get().getPassword()
 				+ "\nName: " + model.get().getFirst() + " " + model.get().getLast() + "\nEmail: " + model.get().getEmail()
@@ -53,8 +52,35 @@ public class UserService {
 
 	public Optional<Object> create(User userToBeRegistered) throws SQLException, IOException {
 			UserDAO user = new UserDAO();
-			Optional<User> model = Optional.ofNullable(user.create(userToBeRegistered));
 
-		return Optional.empty();
+			Scanner myObj = new Scanner(System.in);  // Create a Scanner object
+
+			System.out.println("Enter First name: ");
+			userToBeRegistered.setFirst(myObj.nextLine());// Read user input
+
+			System.out.println("Enter Last name: ");
+			userToBeRegistered.setLast(myObj.nextLine());
+
+			System.out.println("Enter email: ");
+			 userToBeRegistered.setEmail(myObj.nextLine()); // Read user input
+
+			System.out.println("Enter password: ");
+			userToBeRegistered.setPassword(myObj.nextLine());
+
+			Random rand = new Random();
+			int id = (int)(1000 + (Math.random() * 10000));
+			String userName = userToBeRegistered.getFirst() + userToBeRegistered.getLast() + (int)(1000 + (Math.random() * 10000));
+			userToBeRegistered.setId(id);
+			userToBeRegistered.setUsername(userName);
+
+//			System.out.println("Enter role: ");
+//			userToBeRegistered.setRole(myObj.nextLine());
+
+
+			//Optional<User> model = Optional.ofNullable(user.create(userToBeRegistered));
+
+			//return Optional.empty();
+		//return Optional.of(user.create(userToBeRegistered));
+		return Optional.of(user.create(userToBeRegistered));
 	}
 }

@@ -46,6 +46,7 @@ public class UserService {
 		System.out.println("ID: "+ model.get().getId() + "\nUsername: : " + model.get().getUsername() + "\nPassword: " + model.get().getPassword()
 				+ "\nName: " + model.get().getFirst() + " " + model.get().getLast() + "\nEmail: " + model.get().getEmail()
 				+ "\nRole: " + model.get().getRole());
+
 		return Optional.of(model);
 	}
 

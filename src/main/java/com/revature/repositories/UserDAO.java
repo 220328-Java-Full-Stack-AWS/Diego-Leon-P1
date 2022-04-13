@@ -1,5 +1,6 @@
 package com.revature.repositories;
 
+import com.revature.exceptions.RegistrationUnsuccessfulException;
 import com.revature.models.User;
 import com.revature.util.ConnectionFactory;
 
@@ -35,8 +36,6 @@ public class UserDAO {
             ResultSet rs = preparedStatement.executeQuery();
             //next has to be called. it is a boolean. if there is something there it returns true and false if not
 
-
-
             while(rs.next()){
                 model.setId(rs.getInt("ers_users_id"));
                 model.setUsername(rs.getString("ers_username"));
@@ -50,13 +49,10 @@ public class UserDAO {
 
 //				System.out.println(model.getUsername());
             }
-
-
         }catch (SQLException e){
             e.printStackTrace();
         }
         return Optional.of(model);
-
     }
 
     /**
@@ -85,7 +81,8 @@ public class UserDAO {
             //next has to be called. it is a boolean. if there is something there it returns true and false if not
 
         }catch (SQLException e){
-            e.printStackTrace();
+            //e.printStackTrace();
+            throw new RegistrationUnsuccessfulException();
         }
 
 

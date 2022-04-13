@@ -2,8 +2,12 @@ package com.revature.services;
 
 import com.revature.models.User;
 import com.revature.repositories.UserDAO;
+import com.revature.util.ConnectionFactory;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 import java.util.Random;
@@ -22,6 +26,8 @@ import java.util.Scanner;
  * </ul>
  */
 public class AuthService {
+    // might be able to use this to get curren tuser
+    //private static User globalUser = new User();
 
     /**
      * <ul>
@@ -32,7 +38,26 @@ public class AuthService {
      *     <li>Must return user object if the user logs in successfully.</li>
      * </ul>
      */
-    public User login(String username, String password) {
+    public User login(String username, String password) throws SQLException, IOException {
+        User model = new User();
+
+        String SQL = "SELECT * FROM ers_users WHERE ers_username = ? ";
+        Connection connection = ConnectionFactory.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(SQL);
+        preparedStatement.setString(1, username);
+        //preparedStatement.setString(2, password);
+
+        ResultSet rs = preparedStatement.executeQuery();
+
+        while(rs.next()){
+            model.setUsername(rs.getString("ers_username"));
+            model.setPassword(rs.getString("ers_password"));
+        }
+
+        if ((username.equals(model.getUsername()) && (password.equals(model.getPassword())))){
+            System.out.println("User Logged in Succesfully.");
+            return model;
+        }
 
         return null;
     }

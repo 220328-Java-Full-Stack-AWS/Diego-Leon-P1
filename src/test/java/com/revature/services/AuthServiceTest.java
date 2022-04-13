@@ -5,6 +5,8 @@ import static org.junit.Assert.assertThrows;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Optional;
 
 import com.revature.exceptions.NewUserHasNonZeroIdException;
@@ -19,7 +21,7 @@ import com.revature.models.Role;
 import com.revature.models.User;
 
 public class AuthServiceTest {
-	
+
 	private static AuthService authService;
 	private static UserService userService;
 	private static UserDAO userDAO;
@@ -34,18 +36,21 @@ public class AuthServiceTest {
 		userService = mock(UserService.class);
 		userDAO = mock(UserDAO.class);
 	}
-	
+
 	@Before
 	public void setUp() throws Exception {
-		EMPLOYEE_TO_REGISTER = new User(0, "genericEmployee1", "genericPassword", Role.EMPLOYEE);
-		GENERIC_EMPLOYEE_1 = new User(1, "genericEmployee1", "genericPassword", Role.EMPLOYEE);
-		GENERIC_FINANCE_MANAGER_1 = new User(1, "genericManager1", "genericPassword", Role.FINANCE_MANAGER);
+		EMPLOYEE_TO_REGISTER = new User(0, "genericEmployee1", "genericPassword","genericName",
+				"genericLast", "genericEmail", Role.EMPLOYEE);
+		GENERIC_EMPLOYEE_1 = new User(1, "genericEmployee1", "genericPassword", "genericName",
+				"genericLast", "genericEmail",Role.EMPLOYEE);
+		GENERIC_FINANCE_MANAGER_1 = new User(1, "genericManager1", "genericPassword","genericName",
+				"genericLast", "genericEmail", Role.FINANCE_MANAGER);
 	}
 
 	@Test
-	public void testRegisterFailsWhenUsernameIsTaken() {
+	public void testRegisterFailsWhenUsernameIsTaken() throws SQLException, IOException {
 		when(userService.getByUsername(anyString())).thenReturn(Optional.of(GENERIC_EMPLOYEE_1));
-		
+
 		assertThrows(UsernameNotUniqueException.class,
 			() -> authService.register(EMPLOYEE_TO_REGISTER)
 		);
@@ -55,10 +60,10 @@ public class AuthServiceTest {
 	}
 
 	@Test
-	public void testRegisterPassesWhenUsernameIsNotTaken() {
+	public void testRegisterPassesWhenUsernameIsNotTaken() throws SQLException, IOException {
 		when(userService.getByUsername(anyString())).thenReturn(Optional.empty());
 		when(userDAO.create(anyObject())).thenReturn(GENERIC_EMPLOYEE_1);
-		
+
 		assertEquals(GENERIC_EMPLOYEE_1, authService.register(EMPLOYEE_TO_REGISTER));
 
 		verify(userService).getByUsername(EMPLOYEE_TO_REGISTER.getUsername());
@@ -84,7 +89,7 @@ public class AuthServiceTest {
 	}
 
 	@Test
-	public void testLoginPassesWhenUsernameDoesExistAndPasswordMatches() {
+	public void testLoginPassesWhenUsernameDoesExistAndPasswordMatches() throws SQLException, IOException {
 		when(userService.getByUsername(anyString())).thenReturn(Optional.of(GENERIC_EMPLOYEE_1));
 
 		assertEquals(GENERIC_EMPLOYEE_1, authService.login(GENERIC_EMPLOYEE_1.getUsername(), GENERIC_EMPLOYEE_1.getPassword()));

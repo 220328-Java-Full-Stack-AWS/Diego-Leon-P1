@@ -4,7 +4,9 @@ package com.revature.util;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -15,11 +17,11 @@ public class ConnectionFactoryTest {
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
-        connectionFactory = ConnectionFactory.getInstance();
+        connectionFactory = (ConnectionFactory) ConnectionFactory.connect();
     }
 
     @Test
-    public void testConnectionFactoryIsAbleToGetConnection() {
+    public void testConnectionFactoryIsAbleToGetConnection() throws IOException, SQLException {
         Connection conn = connectionFactory.getConnection();
 
         assertThat(conn, instanceOf(Connection.class));

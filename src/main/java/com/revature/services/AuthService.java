@@ -27,7 +27,7 @@ import java.util.Scanner;
  */
 public class AuthService {
     // might be able to use this to get curren tuser
-    //private static User globalUser = new User();
+    private static User currentUser = new User();
 
     /**
      * <ul>
@@ -39,7 +39,8 @@ public class AuthService {
      * </ul>
      */
     public User login(String username, String password) throws SQLException, IOException {
-        User model = new User();
+
+        //User model = new User();
 
         String SQL = "SELECT * FROM ers_users WHERE ers_username = ? ";
         Connection connection = ConnectionFactory.getConnection();
@@ -50,13 +51,18 @@ public class AuthService {
         ResultSet rs = preparedStatement.executeQuery();
 
         while(rs.next()){
-            model.setUsername(rs.getString("ers_username"));
-            model.setPassword(rs.getString("ers_password"));
+            currentUser.setUsername(rs.getString("ers_username"));
+            currentUser.setPassword(rs.getString("ers_password"));
+            currentUser.setId(rs.getInt("ers_users_id"));
+            currentUser.setFirst(rs.getString("user_first_name"));
+            currentUser.setLast(rs.getString("user_last_name"));
+            currentUser.setEmail(rs.getString("user_email"));
         }
 
-        if ((username.equals(model.getUsername()) && (password.equals(model.getPassword())))){
-            System.out.println("User Logged in Succesfully.");
-            return model;
+        if ((username.equals(currentUser.getUsername()) && (password.equals(currentUser.getPassword())))){
+            System.out.println("User Logged in Successfully.");
+
+//            return model;
         }
 
         return null;
@@ -112,6 +118,7 @@ public class AuthService {
      * possibility of a user being unavailable.
      */
     public Optional<User> exampleRetrieveCurrentUser() {
+        System.out.println(currentUser);
         return Optional.empty();
     }
 }

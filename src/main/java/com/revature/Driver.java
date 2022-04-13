@@ -49,6 +49,8 @@ public class Driver {
              int userChoice = Integer.parseInt(choice.nextLine());
 
             if (userChoice == 1) {
+
+                //There is an issue where if there is white space after the username it will not recognize it
                 AuthService user = new AuthService();
 
                 System.out.println("Log In Page");
@@ -58,12 +60,15 @@ public class Driver {
                 Scanner myObj = new Scanner(System.in);  // Create a Scanner object
 
                 System.out.println("Enter user name: ");
-                user_name = (myObj.nextLine());// Read user input
+                user_name = (myObj.nextLine());
+                //user_name.replaceAll("\\s+","");// Read user input
 
                 System.out.println("Enter password: ");
                 password = (myObj.nextLine());
 
                 user.login(user_name, password);
+
+                user.exampleRetrieveCurrentUser();
 
             } else if (userChoice == 2){
                 System.out.println("Registration Page");

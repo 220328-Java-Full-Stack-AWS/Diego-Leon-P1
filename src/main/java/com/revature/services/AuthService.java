@@ -1,8 +1,13 @@
 package com.revature.services;
 
 import com.revature.models.User;
+import com.revature.repositories.UserDAO;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Optional;
+import java.util.Random;
+import java.util.Scanner;
 
 /**
  * The AuthService should handle login and registration for the ERS application.
@@ -45,10 +50,35 @@ public class AuthService {
      * Note: userToBeRegistered will have an id=0, additional fields may be null.
      * After registration, the id will be a positive integer.
      */
-    public User register(User userToBeRegistered) {
+    public User register(User userToBeRegistered) throws SQLException, IOException {
+        UserDAO user = new UserDAO();
+
+        Scanner myObj = new Scanner(System.in);  // Create a Scanner object
+
+        System.out.println("Enter First name: ");
+        userToBeRegistered.setFirst(myObj.nextLine());// Read user input
+
+        System.out.println("Enter Last name: ");
+        userToBeRegistered.setLast(myObj.nextLine());
+
+        System.out.println("Enter email: ");
+        userToBeRegistered.setEmail(myObj.nextLine()); // Read user input
+
+        System.out.println("Enter password: ");
+        userToBeRegistered.setPassword(myObj.nextLine());
+
+        Random rand = new Random();
+        int id = (int)(1000 + (Math.random() * 10000));
+        String userName = userToBeRegistered.getFirst() + userToBeRegistered.getLast() + (int)(1000 + (Math.random() * 10000));
+        userToBeRegistered.setId(id);
+        userToBeRegistered.setUsername(userName);
+
+//			System.out.println("Enter role: ");
+//			userToBeRegistered.setRole(myObj.nextLine());
+
+        return user.create(userToBeRegistered);
 
 
-        return null;
     }
 
     /**

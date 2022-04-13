@@ -7,6 +7,7 @@ package com.revature;
 //import java.sql.Connection;
 import com.revature.models.User;
 import com.revature.repositories.UserDAO;
+import com.revature.services.AuthService;
 import com.revature.services.UserService;
 import com.revature.util.ConnectionFactory;
 
@@ -60,10 +61,16 @@ public class Driver {
                 System.out.println("Username is: " + password);  // Output user input
             } else if (userChoice == 2){
                 System.out.println("Registration Page");
-                UserService user = new UserService();
+//                UserService user = new UserService();
                 //user.getByUsername("diego_leon");
+//                User user1 = new User();
+//                user.create(user1);
+                AuthService user = new AuthService();
                 User user1 = new User();
-                user.create(user1);
+                user.register(user1);
+
+
+
 //                Scanner myObj = new Scanner(System.in);  // Create a Scanner object
 //                System.out.println("Enter username: ");
 //

@@ -30,7 +30,6 @@ import com.revature.util.ConnectionFactory;
  */
 public class UserService {
 
-//	Connection connection = ConnectionFactory.getConnection();
 
 	public UserService() throws SQLException, IOException {
 		super();
@@ -50,37 +49,4 @@ public class UserService {
 		return Optional.of(model);
 	}
 
-	public Optional<Object> create(User userToBeRegistered) throws SQLException, IOException {
-			UserDAO user = new UserDAO();
-
-			Scanner myObj = new Scanner(System.in);  // Create a Scanner object
-
-			System.out.println("Enter First name: ");
-			userToBeRegistered.setFirst(myObj.nextLine());// Read user input
-
-			System.out.println("Enter Last name: ");
-			userToBeRegistered.setLast(myObj.nextLine());
-
-			System.out.println("Enter email: ");
-			 userToBeRegistered.setEmail(myObj.nextLine()); // Read user input
-
-			System.out.println("Enter password: ");
-			userToBeRegistered.setPassword(myObj.nextLine());
-
-			Random rand = new Random();
-			int id = (int)(1000 + (Math.random() * 10000));
-			String userName = userToBeRegistered.getFirst() + userToBeRegistered.getLast() + (int)(1000 + (Math.random() * 10000));
-			userToBeRegistered.setId(id);
-			userToBeRegistered.setUsername(userName);
-
-//			System.out.println("Enter role: ");
-//			userToBeRegistered.setRole(myObj.nextLine());
-
-
-			//Optional<User> model = Optional.ofNullable(user.create(userToBeRegistered));
-
-			//return Optional.empty();
-		//return Optional.of(user.create(userToBeRegistered));
-		return Optional.of(user.create(userToBeRegistered));
-	}
 }

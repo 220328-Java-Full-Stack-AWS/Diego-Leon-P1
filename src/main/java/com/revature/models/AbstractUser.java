@@ -24,17 +24,32 @@ public class AbstractUser {
     private int id;
     private String username;
     private String password;
+    //adding First, Last and email to template
+    private String first;
+    private  String last;
+    private  String email;
     private Role role;
 
     public AbstractUser() {
         super();
     }
 
-    public AbstractUser(int id, String username, String password, Role role) {
+//    public AbstractUser(int id, String username, String password, Role role) {
+//        super();
+//        this.id = id;
+//        this.username = username;
+//        this.password = password;
+//        this.role = role;
+//    }
+
+    public AbstractUser(int id, String username, String password, String first, String last, String email, Role role) {
         super();
         this.id = id;
         this.username = username;
         this.password = password;
+        this.first = first;
+        this.last = last;
+        this.email = email;
         this.role = role;
     }
 
@@ -70,6 +85,31 @@ public class AbstractUser {
         this.role = role;
     }
 
+    public String getFirst() {
+        return first;
+    }
+
+    public void setFirst(String first) {
+        this.first = first;
+    }
+
+    public String getLast() {
+        return last;
+    }
+
+    public void setLast(String last) {
+        this.last = last;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -89,7 +129,19 @@ public class AbstractUser {
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", first='" + first + '\'' +
+                ", last='" + last + '\'' +
+                ", email='" + email + '\'' +
                 ", role=" + role +
                 '}';
     }
+//    @Override
+//    public String toString() {
+//        return "AbstractUser{" +
+//                "id=" + id +
+//                ", username='" + username + '\'' +
+//                ", password='" + password + '\'' +
+//                ", role=" + role +
+//                '}';
+//    }
 }

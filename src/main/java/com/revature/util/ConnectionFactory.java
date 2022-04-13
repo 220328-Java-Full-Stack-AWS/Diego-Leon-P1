@@ -17,9 +17,17 @@ import java.util.Properties;
 public class ConnectionFactory {
 
     private static Connection connection;
+    private static ConnectionFactory connectionFactory;
     //removed super();
     private ConnectionFactory() {
 
+    }
+
+    public static ConnectionFactory getConnectionFactory() {
+            if (connectionFactory == null){
+                connectionFactory = new ConnectionFactory();
+            }
+            return connectionFactory;
     }
 
     /**
@@ -28,7 +36,7 @@ public class ConnectionFactory {
      *
      * {@code ConnectionFactory.getInstance()}
      */
-    public static Connection getConnection() throws SQLException, IOException {
+    public static Connection getConnection(){
         if(connection == null) {
             connection = connect();
         }
@@ -40,36 +48,32 @@ public class ConnectionFactory {
      * <p>The {@link ConnectionFactory#connect()} method is responsible for leveraging a specific Database Driver to obtain an instance of the {@link java.sql.Connection} interface.</p>
      * <p>Typically, this is accomplished via the use of the {@link java.sql.DriverManager} class.</p>
      */
-    static Connection connect() throws IOException, SQLException {
-        //creating jdbc url to connect to db
+    static Connection connect() {
+
 
         Properties props = new Properties();
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         InputStream input = loader.getResourceAsStream("application.properties");
-        props.load(input);
-//
-        String connectionString = "jdbc:postgresql://" +
-                props.getProperty("hostname") + ":" +
-                props.getProperty("port") + "/" +
-                props.getProperty("dbname");
-
-        String username = props.getProperty("username");
-        String password = props.getProperty("password");
-
-        connection = DriverManager.getConnection(connectionString, username, password);
-//
-//        try {
-//            Connection connection = DriverManager.getConnection(url, props);
-//            System.out.println("Connection to PostgresSQL successful.");
-//        } catch (SQLException e) {
-//            System.out.println("Error connecting to PostgresSQL.");
-//            e.printStackTrace();
-//        }
-
-        //rreccomended that each crud operation be a class each
+        try {
+            props.load(input);
 
 
+            String connectionString = "jdbc:postgresql://" +
+                    props.getProperty("hostname") + ":" +
+                    props.getProperty("port") + "/" +
+                    props.getProperty("dbname");
 
+            String username = props.getProperty("username");
+            String password = props.getProperty("password");
+
+
+            connection = DriverManager.getConnection(connectionString, username, password);
+
+
+            System.out.println("Connection String: " + connectionString);
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+        }
 
         return connection;
     }

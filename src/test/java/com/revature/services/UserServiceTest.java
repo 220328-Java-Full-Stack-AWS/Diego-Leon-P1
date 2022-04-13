@@ -5,6 +5,8 @@ import static org.junit.Assert.assertThrows;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Optional;
 
 import com.revature.exceptions.NewUserHasNonZeroIdException;
@@ -34,11 +36,12 @@ public class UserServiceTest {
 
     @Before
     public void setUp() throws Exception {
-        GENERIC_EMPLOYEE_1 = new User(1, "genericEmployee1", "genericPassword", Role.EMPLOYEE);
+        GENERIC_EMPLOYEE_1 = new User(1, "genericEmployee1", "genericPassword","genericName",
+                "genericLast", "genericEmail", Role.EMPLOYEE);
     }
 
     @Test
-    public void testGetByUsernamePassesWhenUsernameExists() {
+    public void testGetByUsernamePassesWhenUsernameExists() throws SQLException, IOException {
         when(userDAO.getByUsername(anyString())).thenReturn(Optional.of(GENERIC_EMPLOYEE_1));
 
         assertEquals(Optional.of(GENERIC_EMPLOYEE_1), userService.getByUsername(GENERIC_EMPLOYEE_1.getUsername()));

@@ -5,25 +5,38 @@ package com.revature;
 //
 //import javax.annotation.processing.SupportedAnnotationTypes;
 //import java.sql.Connection;
+import com.revature.models.User;
+import com.revature.repositories.UserDAO;
+import com.revature.services.UserService;
 import com.revature.util.ConnectionFactory;
 
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.SQLOutput;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class Driver {
 
     private static boolean running = true;
 
-    public static void main(String[] args) {
-        try {
-            Connection conn = ConnectionFactory.getConnection();
-            System.out.println("Connection to PostgresSQL successful.");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public static void main(String[] args) throws SQLException, IOException {
+
+//        UserDAO user = new UserDAO();
+//        Optional<User> model =user.getByUsername("diego_leon");
+//        System.out.println(model.get().getUsername());
+
+        UserService user = new UserService();
+        user.getByUsername("diego_leon");
+
+//        try {
+//            Connection conn = ConnectionFactory.getConnection();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
 
 //        while (running) {
 //

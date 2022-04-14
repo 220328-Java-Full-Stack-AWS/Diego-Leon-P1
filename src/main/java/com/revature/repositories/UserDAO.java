@@ -62,19 +62,19 @@ public class UserDAO {
      * </ul>
      */
     public User create(User userToBeRegistered) {
-        String SQL = "INSERT INTO ers_users (ers_users_id,ers_username,ers_password,user_first_name,user_last_name," +
-                "user_email,user_role_id ) VALUES (?,?,?,?,?,?,?)";
+        String SQL = "INSERT INTO ers_users (ers_username,ers_password,user_first_name,user_last_name," +
+                "user_email,user_role_id ) VALUES (?,?,?,?,?,?)";
 
         try {
 
             PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(SQL);
-            preparedStatement.setInt(1, userToBeRegistered.getId());
-            preparedStatement.setString(2,userToBeRegistered.getUsername());
-            preparedStatement.setString(3,userToBeRegistered.getPassword());
-            preparedStatement.setString(4,userToBeRegistered.getFirst());
-            preparedStatement.setString(5, userToBeRegistered.getLast());
-            preparedStatement.setString(6, userToBeRegistered.getEmail());
-            preparedStatement.setInt(7, 2);
+            //preparedStatement.setInt(1, userToBeRegistered.getId());
+            preparedStatement.setString(1,userToBeRegistered.getUsername());
+            preparedStatement.setString(2,userToBeRegistered.getPassword());
+            preparedStatement.setString(3,userToBeRegistered.getFirst());
+            preparedStatement.setString(4, userToBeRegistered.getLast());
+            preparedStatement.setString(5, userToBeRegistered.getEmail());
+            preparedStatement.setInt(6, 2);
 
             preparedStatement.executeUpdate();
             //next has to be called. it is a boolean. if there is something there it returns true and false if not

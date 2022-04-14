@@ -26,8 +26,8 @@ import java.util.Scanner;
  * </ul>
  */
 public class AuthService {
-    // might be able to use this to get curren tuser
-    //private static User globalUser = new User();
+    // might be able to use this to get current user
+    private static User currentUser = new User();
 
     /**
      * <ul>
@@ -37,29 +37,33 @@ public class AuthService {
      *     <li>Should throw exception if the passwords do not match.</li>
      *     <li>Must return user object if the user logs in successfully.</li>
      * </ul>
+     * @return
      */
-    public User login(String username, String password) throws SQLException, IOException {
-        User model = new User();
+    public boolean login(String username, String password) throws SQLException, IOException {
 
         String SQL = "SELECT * FROM ers_users WHERE ers_username = ? ";
         Connection connection = ConnectionFactory.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(SQL);
         preparedStatement.setString(1, username);
-        //preparedStatement.setString(2, password);
 
         ResultSet rs = preparedStatement.executeQuery();
 
         while(rs.next()){
-            model.setUsername(rs.getString("ers_username"));
-            model.setPassword(rs.getString("ers_password"));
+            currentUser.setUsername(rs.getString("ers_username"));
+            currentUser.setPassword(rs.getString("ers_password"));
+            currentUser.setId(rs.getInt("ers_users_id"));
+            currentUser.setFirst(rs.getString("user_first_name"));
+            currentUser.setLast(rs.getString("user_last_name"));
+            currentUser.setEmail(rs.getString("user_email"));
         }
 
-        if ((username.equals(model.getUsername()) && (password.equals(model.getPassword())))){
-            System.out.println("User Logged in Succesfully.");
-            return model;
+        if ((username.equals(currentUser.getUsername()) && (password.equals(currentUser.getPassword())))){
+            System.out.println("User Logged in Successfully.");
+
+            return true;
         }
 
-        return null;
+        return false;
     }
 
     /**
@@ -111,7 +115,24 @@ public class AuthService {
      * It leverages the Optional type which is a useful interface to handle the
      * possibility of a user being unavailable.
      */
-    public Optional<User> exampleRetrieveCurrentUser() {
-        return Optional.empty();
+    public Optional<User> exampleRetrieveCurrentUser() throws SQLException {
+
+        String SQL = "SELECT * FROM ers_users WHERE ers_username = ? ";
+        Connection connection = ConnectionFactory.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(SQL);
+        preparedStatement.setString(1, currentUser.getUsername());
+
+        ResultSet rs = preparedStatement.executeQuery();
+
+        while(rs.next()){
+            currentUser.setUsername(rs.getString("ers_username"));
+            currentUser.setPassword(rs.getString("ers_password"));
+            currentUser.setId(rs.getInt("ers_users_id"));
+            currentUser.setFirst(rs.getString("user_first_name"));
+            currentUser.setLast(rs.getString("user_last_name"));
+            currentUser.setEmail(rs.getString("user_email"));
+        }
+
+        return Optional.of(currentUser);
     }
 }

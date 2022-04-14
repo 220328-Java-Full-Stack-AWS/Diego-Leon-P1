@@ -52,7 +52,7 @@ public class Driver {
 
                     System.out.println("Enter user name: ");
                     user_name = (myObj.nextLine());
-                    //user_name.replaceAll("\\s+","");// Read user input
+
 
                     System.out.println("Enter password: ");
                     password = (myObj.nextLine());

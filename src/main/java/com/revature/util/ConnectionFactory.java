@@ -69,8 +69,6 @@ public class ConnectionFactory {
 
             connection = DriverManager.getConnection(connectionString, username, password);
 
-
-            System.out.println("Connection String: " + connectionString);
         } catch (IOException | SQLException e) {
             e.printStackTrace();
         }

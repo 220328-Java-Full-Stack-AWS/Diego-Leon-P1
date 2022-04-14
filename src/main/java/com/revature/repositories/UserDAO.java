@@ -13,9 +13,9 @@ import java.util.Optional;
 
 public class UserDAO {
 
-//Data access Object
-    //uses conceit to connect to database and will insert and delete users
-    Optional<User> result =  Optional.empty();
+////Data access Object
+//    //uses conceit to connect to database and will insert and delete users
+//    Optional<User> result =  Optional.empty();
 
     public UserDAO() throws SQLException, IOException {
     }
@@ -24,7 +24,7 @@ public class UserDAO {
      * Should retrieve a User from the DB with the corresponding username or an empty optional if there is no match.
      */
     public Optional<User> getByUsername(String username) {
-//should reference model here
+        //should reference model here
         User model = new User();
 
         try {
@@ -45,9 +45,8 @@ public class UserDAO {
                 model.setEmail(rs.getString("user_email"));
                 //model.setRole();
 
-//                model.setRole(rs.getInt("user_role_id"));
+                // model.setRole(rs.getInt("user_role_id"));
 
-//				System.out.println(model.getUsername());
             }
         }catch (SQLException e){
             e.printStackTrace();

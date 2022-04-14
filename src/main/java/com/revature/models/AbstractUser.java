@@ -34,15 +34,9 @@ public class AbstractUser {
         super();
     }
 
-//    public AbstractUser(int id, String username, String password, Role role) {
-//        super();
-//        this.id = id;
-//        this.username = username;
-//        this.password = password;
-//        this.role = role;
-//    }
 
-    public AbstractUser(int id, String username, String password, String first, String last, String email, Role role) {
+    public AbstractUser(int id, String username, String password, String first,
+                        String last, String email, Role role) {
         super();
         this.id = id;
         this.username = username;
@@ -135,13 +129,4 @@ public class AbstractUser {
                 ", role=" + role +
                 '}';
     }
-//    @Override
-//    public String toString() {
-//        return "AbstractUser{" +
-//                "id=" + id +
-//                ", username='" + username + '\'' +
-//                ", password='" + password + '\'' +
-//                ", role=" + role +
-//                '}';
-//    }
 }

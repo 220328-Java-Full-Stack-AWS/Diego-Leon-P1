@@ -34,7 +34,8 @@ public class Driver {
             if (!loggedIn) {
                 System.out.println("What would you like to do: " + "\n" +
                         "Type to 1 Log In" + "\n" +
-                        "Type 2 to Register");
+                        "Type 2 to Register" + "\n" +
+                        "Type 3 to Exit");
 
                 Scanner choice = new Scanner(System.in);
                 int userChoice = Integer.parseInt(choice.nextLine());
@@ -72,6 +73,9 @@ public class Driver {
                      user1 = new User();
                     user.register(user1);
 
+                }else if(userChoice == 3){
+                    System.out.println("Goodbye.");
+                    running = false;
                 }
 
 

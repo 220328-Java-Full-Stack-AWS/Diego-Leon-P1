@@ -34,11 +34,11 @@ public class UserServiceTest {
         userDAO = mock(UserDAO.class);
     }
 
-    @Before
-    public void setUp() throws Exception {
-        GENERIC_EMPLOYEE_1 = new User(1, "genericEmployee1", "genericPassword","genericName",
-                "genericLast", "genericEmail", Role.EMPLOYEE);
-    }
+//    @Before
+//    public void setUp() throws Exception {
+//        GENERIC_EMPLOYEE_1 = new User(1, "genericEmployee1", "genericPassword","genericName",
+//                "genericLast", "genericEmail", Role.EMPLOYEE);
+//    }
 
     @Test
     public void testGetByUsernamePassesWhenUsernameExists() throws SQLException, IOException {

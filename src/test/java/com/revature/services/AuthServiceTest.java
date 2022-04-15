@@ -37,15 +37,15 @@ public class AuthServiceTest {
 		userDAO = mock(UserDAO.class);
 	}
 
-	@Before
-	public void setUp() throws Exception {
-		EMPLOYEE_TO_REGISTER = new User(0, "genericEmployee1", "genericPassword","genericName",
-				"genericLast", "genericEmail", Role.EMPLOYEE);
-		GENERIC_EMPLOYEE_1 = new User(1, "genericEmployee1", "genericPassword", "genericName",
-				"genericLast", "genericEmail",Role.EMPLOYEE);
-		GENERIC_FINANCE_MANAGER_1 = new User(1, "genericManager1", "genericPassword","genericName",
-				"genericLast", "genericEmail", Role.FINANCE_MANAGER);
-	}
+//	@Before
+//	public void setUp() throws Exception {
+//		EMPLOYEE_TO_REGISTER = new User(0, "genericEmployee1", "genericPassword","genericName",
+//				"genericLast", "genericEmail", Role.EMPLOYEE);
+//		GENERIC_EMPLOYEE_1 = new User(1, "genericEmployee1", "genericPassword", "genericName",
+//				"genericLast", "genericEmail",Role.EMPLOYEE);
+//		GENERIC_FINANCE_MANAGER_1 = new User(1, "genericManager1", "genericPassword","genericName",
+//				"genericLast", "genericEmail", Role.FINANCE_MANAGER);
+//	}
 
 	@Test
 	public void testRegisterFailsWhenUsernameIsTaken() throws SQLException, IOException {

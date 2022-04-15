@@ -131,6 +131,7 @@ public class AuthService {
             currentUser.setFirst(rs.getString("user_first_name"));
             currentUser.setLast(rs.getString("user_last_name"));
             currentUser.setEmail(rs.getString("user_email"));
+            currentUser.setRole(rs.getInt("user_role_id"));
         }
 
         return Optional.of(currentUser);

@@ -1,5 +1,6 @@
 package com.revature.services;
 
+import com.revature.models.Role;
 import com.revature.models.User;
 import com.revature.repositories.UserDAO;
 import com.revature.util.ConnectionFactory;
@@ -27,7 +28,7 @@ import java.util.Scanner;
  */
 public class AuthService {
     // might be able to use this to get current user
-    private static User currentUser = new User();
+    protected static User currentUser = new User();
 
     /**
      * <ul>
@@ -117,6 +118,11 @@ public class AuthService {
      */
     public Optional<User> exampleRetrieveCurrentUser() throws SQLException {
 
+
+
+
+//        String SQL = "SELECT * FROM ers_users eu INNER JOIN ers_user_roles eur\n" +
+//                "ON eur.ers_user_role_id = eu.user_role_id WHERE eu.ers_username = ?";
         String SQL = "SELECT * FROM ers_users WHERE ers_username = ? ";
         Connection connection = ConnectionFactory.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(SQL);
@@ -132,6 +138,7 @@ public class AuthService {
             currentUser.setLast(rs.getString("user_last_name"));
             currentUser.setEmail(rs.getString("user_email"));
             currentUser.setRole(rs.getInt("user_role_id"));
+
         }
 
         return Optional.of(currentUser);

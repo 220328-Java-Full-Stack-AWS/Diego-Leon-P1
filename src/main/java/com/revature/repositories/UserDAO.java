@@ -54,6 +54,39 @@ public class UserDAO {
         return Optional.of(model);
     }
 
+//    //get by ID
+//
+//    public Optional<User> getByID(int id) {
+//        //should reference model here
+//        User model = new User();
+//
+//        try {
+//            String SQL = "SELECT * FROM ers_users WHERE ers_users_id = ?";
+//            Connection connection = ConnectionFactory.getConnection();
+//            PreparedStatement preparedStatement = connection.prepareStatement(SQL);
+//            preparedStatement.setInt(1, id);
+//
+//            ResultSet rs = preparedStatement.executeQuery();
+//            //next has to be called. it is a boolean. if there is something there it returns true and false if not
+//
+//            while(rs.next()){
+//                model.setId(rs.getInt("ers_users_id"));
+//                model.setUsername(rs.getString("ers_username"));
+//                model.setPassword(rs.getString("ers_password"));
+//                model.setLast(rs.getString("user_last_name"));
+//                model.setFirst(rs.getString("user_first_name"));
+//                model.setEmail(rs.getString("user_email"));
+//                //model.setRole();
+//
+//                // model.setRole(rs.getInt("user_role_id"));
+//
+//            }
+//        }catch (SQLException e){
+//            e.printStackTrace();
+//        }
+//        return Optional.of(model);
+//    }
+
     /**
      * <ul>
      *     <li>Should Insert a new User record into the DB with the provided information.</li>
@@ -68,7 +101,7 @@ public class UserDAO {
         try {
 
             PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(SQL);
-            //preparedStatement.setInt(1, userToBeRegistered.getId());
+            //ID is not set since it is set to Serial in the DB
             preparedStatement.setString(1,userToBeRegistered.getUsername());
             preparedStatement.setString(2,userToBeRegistered.getPassword());
             preparedStatement.setString(3,userToBeRegistered.getFirst());
@@ -76,12 +109,13 @@ public class UserDAO {
             preparedStatement.setString(5, userToBeRegistered.getEmail());
             preparedStatement.setInt(6, 2);
 
+
             preparedStatement.executeUpdate();
             //next has to be called. it is a boolean. if there is something there it returns true and false if not
 
         }catch (SQLException e){
-            //e.printStackTrace();
-            throw new RegistrationUnsuccessfulException();
+            e.printStackTrace();
+            //throw new RegistrationUnsuccessfulException();
         }
 
 

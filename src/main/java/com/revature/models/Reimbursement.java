@@ -1,5 +1,8 @@
 package com.revature.models;
 
+import java.sql.Blob;
+import java.sql.Timestamp;
+
 /**
  * This concrete Reimbursement class can include additional fields that can be used for
  * extended functionality of the ERS application.
@@ -23,8 +26,9 @@ public class Reimbursement extends AbstractReimbursement {
      * This includes the minimum parameters needed for the {@link com.revature.models.AbstractReimbursement} class.
      * If other fields are needed, please create additional constructors.
      */
-    public Reimbursement(int id, Status status, User author, User resolver, double amount) {
-        super(id, status, author, resolver, amount);
+    public Reimbursement(int id, double amount, Timestamp submitted, Timestamp resolved, String description,
+                         String receipt, int author, int resolver, int status, int type) {
+        super(id, amount, submitted, resolved, description, receipt, author, resolver, status, type);
     }
 
 

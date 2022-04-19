@@ -1,38 +1,31 @@
 package com.revature;
 
-//import jdk.jfr.internal.consumer.FinishedStream;
-//import org.postgresql.core.ConnectionFactory;
-//
-//import javax.annotation.processing.SupportedAnnotationTypes;
-//import java.sql.Connection;
-import com.revature.models.Role;
+import com.revature.models.Reimbursement;
 import com.revature.models.User;
-import com.revature.repositories.UserDAO;
+import com.revature.repositories.ReimbursementDAO;
 import com.revature.services.AuthService;
+import com.revature.services.ReimbursementService;
 import com.revature.services.UserService;
-import com.revature.util.ConnectionFactory;
 
-import javax.swing.*;
+
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.SQLOutput;
-import java.util.Optional;
+import java.util.List;
 import java.util.Scanner;
-
-import static com.revature.models.Role.EMPLOYEE;
 
 public class Driver {
 
     private static boolean running = true;
     private static boolean loggedIn = false;
-    private static Role role =  EMPLOYEE;
 
     public static void main(String[] args) throws SQLException, IOException {
-        
+
         AuthService user = null;
         User user1;
+        ReimbursementService reimbursement = null;
+        Reimbursement reimbursement1;
+        ReimbursementDAO reimbursementDAO;
+        UserService userService = null;
 
 
         while (running) {
@@ -75,19 +68,19 @@ public class Driver {
                     System.out.println("Registration Page");
 
                     user = new AuthService();
-                     user1 = new User();
+                    user1 = new User();
                     user.register(user1);
 
-                }else if(userChoice == 3){
+                } else if (userChoice == 3) {
                     System.out.println("Goodbye.");
                     running = false;
                 }
 
 
-            } else if((loggedIn) &&  (user.exampleRetrieveCurrentUser().get().getRole() == 1 )){
+            } else if ((loggedIn) && (user.exampleRetrieveCurrentUser().get().getRole() == 1)) {
                 System.out.println("Welcome to the ERS Application(Manager), " +
                         user.exampleRetrieveCurrentUser().get().getFirst() + " " +
-                        user.exampleRetrieveCurrentUser().get().getLast() + ".") ;
+                        user.exampleRetrieveCurrentUser().get().getLast() + ".");
                 System.out.println("What would you like to do: " + "\n" +
                         "1. Approve Reimbursement Request" + "\n" +
                         "2. Deny Reimbursement Request" + "\n" +
@@ -98,23 +91,23 @@ public class Driver {
                 Scanner choice = new Scanner(System.in);
                 int userChoice = Integer.parseInt(choice.nextLine());
 
-                if (userChoice == 1){
+                if (userChoice == 1) {
                     System.out.println("Approval Page");
                     //
-                }else if (userChoice == 2){
+                } else if (userChoice == 2) {
                     System.out.println("Denial Page");
-                } else if (userChoice == 3){
+                } else if (userChoice == 3) {
                     System.out.println("Filter Results");
-                } else if (userChoice == 4){
+                } else if (userChoice == 4) {
                     System.out.println("Role Assigment Page.");
-                }else if (userChoice == 5){
+                } else if (userChoice == 5) {
                     System.out.println("Goodbye.");
                     loggedIn = false;
                 }
-            }else if (loggedIn){
+            } else if (loggedIn) {
                 System.out.println("Welcome to the ERS Application, " +
                         user.exampleRetrieveCurrentUser().get().getFirst() + " " +
-                        user.exampleRetrieveCurrentUser().get().getLast() + ".") ;
+                        user.exampleRetrieveCurrentUser().get().getLast() + ".");
                 System.out.println("What would you like to do: " + "\n" +
                         "1. Submit Reimbursement Request" + "\n" +
                         "2. Cancel Pending Reimbursement Request" + "\n" +
@@ -124,16 +117,61 @@ public class Driver {
                 Scanner choice = new Scanner(System.in);
                 int userChoice = Integer.parseInt(choice.nextLine());
 
-                if (userChoice == 1){
+                if (userChoice == 1) {
                     System.out.println("Submission Page");
-                    //
-                }else if (userChoice == 2){
+                    reimbursement = new ReimbursementService();
+                    reimbursement1 = new Reimbursement();
+                    reimbursement.request(reimbursement1);
+                } else if (userChoice == 2) {
                     System.out.println("Cancellation Page");
-                } else if (userChoice == 3){
+                    reimbursementDAO = new ReimbursementDAO();
+                    List<Reimbursement> list = reimbursementDAO.getByUserId(user.exampleRetrieveCurrentUser()
+                            .get().getId());
+                    for (Reimbursement each :
+                            list) {
+                        if (each.getStatus() == 1) {
+                            System.out.println("ID: " + each.getId() + "\nAmount: " + each.getAmount() + "\nDate Submitted: "
+                                    + each.getSubmitted() + "\nDate Resolved: " + each.getResolved() + "\nDescription: " + each.getDescription()
+                                    + "\nReceipt Number: " + each.getReceipt());
+                        }
+                    }
+
+                    System.out.println("Type Reimbursement Id TO CANCEL: ");
+                    Scanner choice1 = new Scanner(System.in);
+                    int userChoice1 = Integer.parseInt(choice1.nextLine());
+
+                    reimbursement.cancelByID(userChoice1);
+                } else if (userChoice == 3) {
                     System.out.println("Submission History");
-                } else if (userChoice == 4){
+                    reimbursementDAO = new ReimbursementDAO();
+                    List<Reimbursement> list = reimbursementDAO.getByUserId(user.exampleRetrieveCurrentUser()
+                            .get().getId());
+                    for (Reimbursement each :
+                            list) {
+                        System.out.println("ID: " + each.getId() + "\nAmount: " + each.getAmount() + "\nDate Submitted: "
+                                + each.getSubmitted() + "\nDate Resolved: " + each.getResolved() + "\nDescription: " + each.getDescription()
+                                + "\nReceipt Number: " + each.getReceipt());
+                    }
+                } else if (userChoice == 4) {
                     System.out.println("Editing Page");
-                } else if (userChoice == 5){
+                    System.out.println("Submission History");
+                    reimbursementDAO = new ReimbursementDAO();
+                    List<Reimbursement> list = reimbursementDAO.getByUserId(user.exampleRetrieveCurrentUser()
+                            .get().getId());
+                    for (Reimbursement each :
+                            list) {
+                        if (each.getStatus() == 1) {
+                            System.out.println("ID: " + each.getId() + "\nAmount: " + each.getAmount() + "\nDate Submitted: "
+                                    + each.getSubmitted() + "\nDate Resolved: " + each.getResolved() + "\nDescription: " + each.getDescription()
+                                    + "\nReceipt Number: " + each.getReceipt());
+                        }
+                    }
+                    System.out.println("Type Reimbursement Id TO Edit: ");
+                    Scanner choice1 = new Scanner(System.in);
+                    int userChoice1 = Integer.parseInt(choice1.nextLine());
+                    reimbursement = new ReimbursementService();
+                    reimbursement.requestToBeEditted(userChoice1);
+                } else if (userChoice == 5) {
                     System.out.println("Goodbye.");
                     loggedIn = false;
                 }

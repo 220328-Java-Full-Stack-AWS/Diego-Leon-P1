@@ -50,4 +50,15 @@ public class UserService {
 		return Optional.of(model);
 	}
 
+//	public Optional<Object> getByID(int id) throws SQLException, IOException {
+//		UserDAO user = new UserDAO();
+//		Optional<User> model = user.getByID(id);
+//
+//		System.out.println("ID: "+ model.get().getId() + "\nUsername: : " + model.get().getUsername() + "\nPassword: " + model.get().getPassword()
+//				+ "\nName: " + model.get().getFirst() + " " + model.get().getLast() + "\nEmail: " + model.get().getEmail()
+//				+ "\nRole: " + model.get().getRole());
+//
+//		return Optional.of(model);
+//	}
+
 }

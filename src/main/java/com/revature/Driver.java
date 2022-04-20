@@ -101,7 +101,7 @@ public class Driver {
                     System.out.println("\nType the reimbursement ID to approve.");
                     Scanner choice1 = new Scanner(System.in);
                     int userChoice1 = Integer.parseInt(choice1.nextLine());
-                    reimbursement.process(userChoice1, 2);
+                    reimbursement.process(userChoice1, 2, user.retrieveCurrentUser().get().getId());
                 } else if (userChoice == 2) {
                     System.out.println("Denial Page\n\n");
                     reimbursement = new ReimbursementService();
@@ -117,7 +117,7 @@ public class Driver {
                     System.out.println("\nType the reimbursement ID to deny.");
                     Scanner choice1 = new Scanner(System.in);
                     int userChoice1 = Integer.parseInt(choice1.nextLine());
-                    reimbursement.process(userChoice1, 3);
+                    reimbursement.process(userChoice1, 3,user.retrieveCurrentUser().get().getId());
                 } else if (userChoice == 3) {
                     System.out.println("Filter Results\n");
                     System.out.println("Filter by: " + "\n" +

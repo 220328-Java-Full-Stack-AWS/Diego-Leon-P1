@@ -201,14 +201,16 @@ public class ReimbursementDAO {
         return requestTobeCancelled;
     }
 
-    public int process(int id, int status) {
-            String SQL = "UPDATE  ers_reimbursement SET reimb_status_id = ? WHERE reimb_id = ?";
+    public int process(int id, int status, int userId) {
+            String SQL = "UPDATE  ers_reimbursement SET reimb_status_id = ?, reimb_resolver = ?  WHERE reimb_id = ?";
 
         try {
 
             PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(SQL);
             preparedStatement.setInt(1, status);
-            preparedStatement.setInt(2, id);
+            preparedStatement.setInt(2, userId);
+            preparedStatement.setInt(3, id);
+
 
             preparedStatement.executeUpdate();
 

@@ -53,9 +53,9 @@ public class ReimbursementService {
      */
 
 
-    public int process(int id, int status) {
+    public int process(int id, int status, int userId) {
         ReimbursementDAO request = new ReimbursementDAO();
-        request.process(id, status);
+        request.process(id, status, userId);
 
         return id;
     }

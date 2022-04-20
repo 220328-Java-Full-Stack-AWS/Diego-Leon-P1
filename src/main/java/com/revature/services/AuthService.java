@@ -15,9 +15,9 @@ import java.util.Scanner;
 
 /**
  * The AuthService should handle login and registration for the ERS application.
- *
+ * <p>
  * {@code login} and {@code register} are the minimum methods required; however, additional methods can be added.
- *
+ * <p>
  * Examples:
  * <ul>
  *     <li>Retrieve Currently Logged-in User</li>
@@ -27,7 +27,8 @@ import java.util.Scanner;
  */
 public class AuthService {
     // might be able to use this to get current user
-    private static User currentUser = new User();
+    private UserDAO dao;
+    protected static User currentUser = new User();
 
     /**
      * <ul>
@@ -37,27 +38,15 @@ public class AuthService {
      *     <li>Should throw exception if the passwords do not match.</li>
      *     <li>Must return user object if the user logs in successfully.</li>
      * </ul>
+     *
      * @return
      */
     public boolean login(String username, String password) throws SQLException, IOException {
 
-        String SQL = "SELECT * FROM ers_users WHERE ers_username = ? ";
-        Connection connection = ConnectionFactory.getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement(SQL);
-        preparedStatement.setString(1, username);
+        dao = new UserDAO();
+        dao.login(username, password, currentUser);
 
-        ResultSet rs = preparedStatement.executeQuery();
-
-        while(rs.next()){
-            currentUser.setUsername(rs.getString("ers_username"));
-            currentUser.setPassword(rs.getString("ers_password"));
-            currentUser.setId(rs.getInt("ers_users_id"));
-            currentUser.setFirst(rs.getString("user_first_name"));
-            currentUser.setLast(rs.getString("user_last_name"));
-            currentUser.setEmail(rs.getString("user_email"));
-        }
-
-        if ((username.equals(currentUser.getUsername()) && (password.equals(currentUser.getPassword())))){
+        if ((username.equals(currentUser.getUsername()) && (password.equals(currentUser.getPassword())))) {
             System.out.println("User Logged in Successfully.");
 
             return true;
@@ -75,12 +64,12 @@ public class AuthService {
      *     <li>Must return user object if the user registers successfully.</li>
      *     <li>Must throw exception if provided user has a non-zero ID</li>
      * </ul>
-     *
+     * <p>
      * Note: userToBeRegistered will have an id=0, additional fields may be null.
      * After registration, the id will be a positive integer.
      */
     public User register(User userToBeRegistered) throws SQLException, IOException {
-        UserDAO user = new UserDAO();
+        dao = new UserDAO();
 
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
 
@@ -97,15 +86,16 @@ public class AuthService {
         userToBeRegistered.setPassword(myObj.nextLine());
 
         Random rand = new Random();
-        int id = (int)(1000 + (Math.random() * 10000));
-        String userName = userToBeRegistered.getFirst() + userToBeRegistered.getLast() + (int)(1000 + (Math.random() * 10000));
+        int id = (int) (1000 + (Math.random() * 10000));
+        String userName = userToBeRegistered.getFirst() + userToBeRegistered.getLast()
+                + (int) (1000 + (Math.random() * 10000));
         userToBeRegistered.setId(id);
         userToBeRegistered.setUsername(userName);
 
 //			System.out.println("Enter role: ");
 //			userToBeRegistered.setRole(myObj.nextLine());
 
-        return user.create(userToBeRegistered);
+        return dao.register(userToBeRegistered);
 
 
     }
@@ -115,8 +105,11 @@ public class AuthService {
      * It leverages the Optional type which is a useful interface to handle the
      * possibility of a user being unavailable.
      */
-    public Optional<User> exampleRetrieveCurrentUser() throws SQLException {
+    public Optional<User> retrieveCurrentUser() throws SQLException {
 
+
+//        String SQL = "SELECT * FROM ers_users eu INNER JOIN ers_user_roles eur\n" +
+//                "ON eur.ers_user_role_id = eu.user_role_id WHERE eu.ers_username = ?";
         String SQL = "SELECT * FROM ers_users WHERE ers_username = ? ";
         Connection connection = ConnectionFactory.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(SQL);
@@ -124,13 +117,15 @@ public class AuthService {
 
         ResultSet rs = preparedStatement.executeQuery();
 
-        while(rs.next()){
+        while (rs.next()) {
             currentUser.setUsername(rs.getString("ers_username"));
             currentUser.setPassword(rs.getString("ers_password"));
             currentUser.setId(rs.getInt("ers_users_id"));
             currentUser.setFirst(rs.getString("user_first_name"));
             currentUser.setLast(rs.getString("user_last_name"));
             currentUser.setEmail(rs.getString("user_email"));
+            currentUser.setRole(rs.getInt("user_role_id"));
+
         }
 
         return Optional.of(currentUser);

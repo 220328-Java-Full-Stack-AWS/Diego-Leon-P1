@@ -1,40 +1,34 @@
 package com.revature;
 
-//import jdk.jfr.internal.consumer.FinishedStream;
-//import org.postgresql.core.ConnectionFactory;
-//
-//import javax.annotation.processing.SupportedAnnotationTypes;
-//import java.sql.Connection;
+import com.revature.models.Reimbursement;
 import com.revature.models.User;
-import com.revature.repositories.UserDAO;
 import com.revature.services.AuthService;
-import com.revature.services.UserService;
-import com.revature.util.ConnectionFactory;
+import com.revature.services.ReimbursementService;
 
-import javax.swing.*;
+
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.SQLOutput;
-import java.util.Optional;
+import java.util.List;
 import java.util.Scanner;
 
 public class Driver {
 
     private static boolean running = true;
     private static boolean loggedIn = false;
+    private static AuthService user = null;
+    private static User user1;
+    private static ReimbursementService reimbursement = null;
+    private static Reimbursement reimbursement1;
 
     public static void main(String[] args) throws SQLException, IOException {
-        
-        AuthService user = null;
-        User user1;
+
 
         while (running) {
             if (!loggedIn) {
                 System.out.println("What would you like to do: " + "\n" +
                         "Type to 1 Log In" + "\n" +
-                        "Type 2 to Register");
+                        "Type 2 to Register" + "\n" +
+                        "Type 3 to Exit");
 
                 Scanner choice = new Scanner(System.in);
                 int userChoice = Integer.parseInt(choice.nextLine());
@@ -69,24 +63,179 @@ public class Driver {
                     System.out.println("Registration Page");
 
                     user = new AuthService();
-                     user1 = new User();
+                    user1 = new User();
                     user.register(user1);
 
+                } else if (userChoice == 3) {
+                    System.out.println("Goodbye.");
+                    running = false;
                 }
 
 
-            } else if (loggedIn){
+            } else if ((loggedIn) && (user.retrieveCurrentUser().get().getRole() == 1)) {
+                System.out.println("Welcome to the ERS Application(Manager), " +
+                        user.retrieveCurrentUser().get().getFirst() + " " +
+                        user.retrieveCurrentUser().get().getLast() + ".");
+                System.out.println("What would you like to do: " + "\n" +
+                        "1. Approve Reimbursement Request" + "\n" +
+                        "2. Deny Reimbursement Request" + "\n" +
+                        "3. Filter Reimbursement Requests by Status" + "\n" +
+                        "4. Assign Roles" + "\n" +
+                        "5. Log off");
+
+                Scanner choice = new Scanner(System.in);
+                int userChoice = Integer.parseInt(choice.nextLine());
+
+                if (userChoice == 1) {
+                    System.out.println("Approval Page\n\n");
+
+                    reimbursement = new ReimbursementService();
+                    List<Reimbursement> list = reimbursement.getReimbursementsByStatus(1);
+                    for (Reimbursement each :
+                            list) {
+                        System.out.println("ID: " + each.getId() + "\nAmount: " + each.getAmount() + "\nDate Submitted: "
+                                + each.getSubmitted() + "\nDate Resolved: " + each.getResolved() + "\nDescription: "
+                                + each.getDescription()
+                                + "\nReceipt Number: " + each.getReceipt());
+                    }
+                    System.out.println("\nType the reimbursement ID to approve.");
+                    Scanner choice1 = new Scanner(System.in);
+                    int userChoice1 = Integer.parseInt(choice1.nextLine());
+                    reimbursement.process(userChoice1, 2);
+                } else if (userChoice == 2) {
+                    System.out.println("Denial Page\n\n");
+                    reimbursement = new ReimbursementService();
+
+                    List<Reimbursement> list = reimbursement.getReimbursementsByStatus(1);
+                    for (Reimbursement each :
+                            list) {
+                        System.out.println("ID: " + each.getId() + "\nAmount: " + each.getAmount() + "\nDate Submitted: "
+                                + each.getSubmitted() + "\nDate Resolved: " + each.getResolved() + "\nDescription: "
+                                + each.getDescription()
+                                + "\nReceipt Number: " + each.getReceipt());
+                    }
+                    System.out.println("\nType the reimbursement ID to deny.");
+                    Scanner choice1 = new Scanner(System.in);
+                    int userChoice1 = Integer.parseInt(choice1.nextLine());
+                    reimbursement.process(userChoice1, 3);
+                } else if (userChoice == 3) {
+                    System.out.println("Filter Results\n");
+                    System.out.println("Filter by: " + "\n" +
+                            "1. Pending" + "\n" +
+                            "2. Approved" + "\n" +
+                            "3. Denied");
+                     choice = new Scanner(System.in);
+                    int userChoice1 = Integer.parseInt(choice.nextLine());
+                            reimbursement = new ReimbursementService();
+
+                            if (userChoice1 == 1){
+                                List<Reimbursement> list = reimbursement.getReimbursementsByStatus(userChoice1);
+                                for (Reimbursement each :
+                                        list) {
+                                        System.out.println("ID: " + each.getId() + "\nAmount: " + each.getAmount() + "\nDate Submitted: "
+                                                + each.getSubmitted() + "\nDate Resolved: " + each.getResolved() + "\nDescription: " + each.getDescription()
+                                                + "\nReceipt Number: " + each.getReceipt());
+
+                                }
+                            }else if (userChoice1 == 2){
+                                List<Reimbursement> list = reimbursement.getReimbursementsByStatus(userChoice1);
+                                for (Reimbursement each :
+                                        list) {
+                                    System.out.println("ID: " + each.getId() + "\nAmount: " + each.getAmount() + "\nDate Submitted: "
+                                            + each.getSubmitted() + "\nDate Resolved: " + each.getResolved() + "\nDescription: " + each.getDescription()
+                                            + "\nReceipt Number: " + each.getReceipt());
+                                }
+                            }else if(userChoice1 ==3){
+                                    List<Reimbursement> list = reimbursement.getReimbursementsByStatus(userChoice1);
+                                    for (Reimbursement each :
+                                            list) {
+                                        System.out.println("ID: " + each.getId() + "\nAmount: " + each.getAmount() + "\nDate Submitted: "
+                                                + each.getSubmitted() + "\nDate Resolved: " + each.getResolved() + "\nDescription: " + each.getDescription()
+                                                + "\nReceipt Number: " + each.getReceipt());
+                                }
+                            }else{
+                                System.out.println("No such choice, choose again.");
+                            }
+
+                } else if (userChoice == 4) {
+                    System.out.println("Role Assigment Page.");
+
+                } else if (userChoice == 5) {
+                    System.out.println("Goodbye.");
+                    loggedIn = false;
+                }
+            } else if (loggedIn) {
                 System.out.println("Welcome to the ERS Application, " +
-                        user.exampleRetrieveCurrentUser().get().getFirst() + " " +
-                        user.exampleRetrieveCurrentUser().get().getLast()) ;
+                        user.retrieveCurrentUser().get().getFirst() + " " +
+                        user.retrieveCurrentUser().get().getLast() + ".");
                 System.out.println("What would you like to do: " + "\n" +
                         "1. Submit Reimbursement Request" + "\n" +
                         "2. Cancel Pending Reimbursement Request" + "\n" +
                         "3. View Past, Pending and Completed Reimbursement Requests" + "\n" +
-                        "4. Edit Pending Reimbursement Request" + "\n");
+                        "4. Edit Pending Reimbursement Request" + "\n" +
+                        "5. Log Off");
                 Scanner choice = new Scanner(System.in);
                 int userChoice = Integer.parseInt(choice.nextLine());
+
+                if (userChoice == 1) {
+                    System.out.println("Submission Page");
+                    reimbursement = new ReimbursementService();
+                    reimbursement1 = new Reimbursement();
+                    reimbursement.request(reimbursement1);
+                } else if (userChoice == 2) {
+                    System.out.println("Cancellation Page");
+                    System.out.println(user.retrieveCurrentUser().get().getId());
+                    List<Reimbursement> list = reimbursement.getByUserId(user.retrieveCurrentUser().get().getId());
+                    for (Reimbursement each :
+                            list) {
+                        if (each.getStatus() == 1) {
+                            System.out.println("ID: " + each.getId() + "\nAmount: " + each.getAmount() + "\nDate Submitted: "
+                                    + each.getSubmitted() + "\nDate Resolved: " + each.getResolved() + "\nDescription: " + each.getDescription()
+                                    + "\nReceipt Number: " + each.getReceipt());
+                        }
+                    }
+
+                    System.out.println("Type Reimbursement Id TO CANCEL: ");
+                    Scanner choice1 = new Scanner(System.in);
+                    int userChoice1 = Integer.parseInt(choice1.nextLine());
+
+                    reimbursement.cancelByID(userChoice1);
+                } else if (userChoice == 3) {
+                    System.out.println("Submission History");
+
+                    List<Reimbursement> list = reimbursement.getByUserId(user.retrieveCurrentUser()
+                            .get().getId());
+                    for (Reimbursement each :
+                            list) {
+                        System.out.println("ID: " + each.getId() + "\nAmount: " + each.getAmount() + "\nDate Submitted: "
+                                + each.getSubmitted() + "\nDate Resolved: " + each.getResolved() + "\nDescription: " + each.getDescription()
+                                + "\nReceipt Number: " + each.getReceipt());
+                    }
+                } else if (userChoice == 4) {
+                    System.out.println("Editing Page");
+                    System.out.println("Submission History");
+                    reimbursement = new ReimbursementService();
+                    List<Reimbursement> list = reimbursement.getByUserId(user.retrieveCurrentUser()
+                            .get().getId());
+                    for (Reimbursement each :
+                            list) {
+                        if (each.getStatus() == 1) {
+                            System.out.println("ID: " + each.getId() + "\nAmount: " + each.getAmount() + "\nDate Submitted: "
+                                    + each.getSubmitted() + "\nDate Resolved: " + each.getResolved() + "\nDescription: " + each.getDescription()
+                                    + "\nReceipt Number: " + each.getReceipt());
+                        }
+                    }
+                    System.out.println("Type Reimbursement Id TO Edit: ");
+                    Scanner choice1 = new Scanner(System.in);
+                    int userChoice1 = Integer.parseInt(choice1.nextLine());
+                    reimbursement = new ReimbursementService();
+                    reimbursement.requestToBeEditted(userChoice1);
+                } else if (userChoice == 5) {
+                    System.out.println("Goodbye.");
+                    loggedIn = false;
+                }
             }
+
         }
 
     }

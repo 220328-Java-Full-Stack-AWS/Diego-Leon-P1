@@ -1,5 +1,7 @@
 package com.revature.models;
 
+import java.sql.Blob;
+import java.sql.Timestamp;
 import java.util.Objects;
 
 /**
@@ -22,22 +24,36 @@ import java.util.Objects;
 public class AbstractReimbursement {
 
     private int id;
-    private Status status;
-    private User author;
-    private User resolver;
     private double amount;
+    private Timestamp submitted;
+    private Timestamp resolved;
+    private String description;
+    private String receipt;
+    private int author;
+    private int resolver;
+    private int status;
+    private int type;
+
+
+
 
     public AbstractReimbursement() {
         super();
     }
 
-    public AbstractReimbursement(int id, Status status, User author, User resolver, double amount) {
+    public AbstractReimbursement(int id, double amount, Timestamp submitted, Timestamp resolved, String description,
+                                 String receipt, int author, int resolver, int status, int type) {
         super();
         this.id = id;
-        this.status = status;
+        this.amount = amount;
+        this.submitted = submitted;
+        this.resolved = resolved;
+        this.description = description;
+        this.receipt = receipt;
         this.author = author;
         this.resolver = resolver;
-        this.amount = amount;
+        this.status = status;
+        this.type = type;
     }
 
     public int getId() {
@@ -48,36 +64,76 @@ public class AbstractReimbursement {
         this.id = id;
     }
 
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    public User getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(User author) {
-        this.author = author;
-    }
-
-    public User getResolver() {
-        return resolver;
-    }
-
-    public void setResolver(User resolver) {
-        this.resolver = resolver;
-    }
-
     public double getAmount() {
         return amount;
     }
 
     public void setAmount(double amount) {
         this.amount = amount;
+    }
+
+    public Timestamp getSubmitted() {
+        return submitted;
+    }
+
+    public void setSubmitted(Timestamp submitted) {
+        this.submitted = submitted;
+    }
+
+    public Timestamp getResolved() {
+        return resolved;
+    }
+
+    public void setResolved(Timestamp resolved) {
+        this.resolved = resolved;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getReceipt() {
+        return receipt;
+    }
+
+    public void setReceipt(String receipt) {
+        this.receipt = receipt;
+    }
+
+    public int getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(int author) {
+        this.author = author;
+    }
+
+    public int getResolver() {
+        return resolver;
+    }
+
+    public void setResolver(int resolver) {
+        this.resolver = resolver;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 
     @Override
@@ -97,10 +153,15 @@ public class AbstractReimbursement {
     public String toString() {
         return "AbstractReimbursement{" +
                 "id=" + id +
-                ", status=" + status +
+                ", amount=" + amount +
+                ", submitted=" + submitted +
+                ", resolved=" + resolved +
+                ", description='" + description + '\'' +
+                ", receipt='" + receipt + '\'' +
                 ", author=" + author +
                 ", resolver=" + resolver +
-                ", amount=" + amount +
+                ", status=" + status +
+                ", type=" + type +
                 '}';
     }
 }

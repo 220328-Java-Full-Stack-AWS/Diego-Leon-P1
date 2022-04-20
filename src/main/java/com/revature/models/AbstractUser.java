@@ -28,7 +28,7 @@ public class AbstractUser {
     private String first;
     private  String last;
     private  String email;
-    private Role role;
+    private int role;
 
     public AbstractUser() {
         super();
@@ -36,7 +36,7 @@ public class AbstractUser {
 
 
     public AbstractUser(int id, String username, String password, String first,
-                        String last, String email, Role role) {
+                        String last, String email, int role) {
         super();
         this.id = id;
         this.username = username;
@@ -71,11 +71,11 @@ public class AbstractUser {
         this.password = password;
     }
 
-    public Role getRole() {
+    public int getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(int role) {
         this.role = role;
     }
 

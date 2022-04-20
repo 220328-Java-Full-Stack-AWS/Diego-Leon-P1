@@ -9,15 +9,10 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Optional;
 
-import com.revature.exceptions.NewUserHasNonZeroIdException;
-import com.revature.exceptions.RegistrationUnsuccessfulException;
 import com.revature.repositories.UserDAO;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.revature.exceptions.UsernameNotUniqueException;
-import com.revature.models.Role;
 import com.revature.models.User;
 
 public class UserServiceTest {
@@ -34,11 +29,11 @@ public class UserServiceTest {
         userDAO = mock(UserDAO.class);
     }
 
-    @Before
-    public void setUp() throws Exception {
-        GENERIC_EMPLOYEE_1 = new User(1, "genericEmployee1", "genericPassword","genericName",
-                "genericLast", "genericEmail", Role.EMPLOYEE);
-    }
+//    @Before
+//    public void setUp() throws Exception {
+//        GENERIC_EMPLOYEE_1 = new User(1, "genericEmployee1", "genericPassword","genericName",
+//                "genericLast", "genericEmail", Role.EMPLOYEE);
+//    }
 
     @Test
     public void testGetByUsernamePassesWhenUsernameExists() throws SQLException, IOException {

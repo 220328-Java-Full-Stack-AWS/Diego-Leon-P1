@@ -1,6 +1,5 @@
 package com.revature.repositories;
 
-import com.revature.exceptions.RegistrationUnsuccessfulException;
 import com.revature.models.User;
 import com.revature.util.ConnectionFactory;
 
@@ -11,11 +10,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 
+
+
 public class UserDAO {
 
-////Data access Object
-//    //uses conceit to connect to database and will insert and delete users
-//    Optional<User> result =  Optional.empty();
 
     public UserDAO() throws SQLException, IOException {
     }
@@ -54,8 +52,8 @@ public class UserDAO {
         return Optional.of(model);
     }
 
-//    //get by ID
-//
+////    //get by ID
+////
 //    public Optional<User> getByID(int id) {
 //        //should reference model here
 //        User model = new User();
@@ -94,7 +92,7 @@ public class UserDAO {
      *     <li>Should return a User object with an updated ID.</li>
      * </ul>
      */
-    public User create(User userToBeRegistered) {
+    public User register(User userToBeRegistered) {
         String SQL = "INSERT INTO ers_users (ers_username,ers_password,user_first_name,user_last_name," +
                 "user_email,user_role_id ) VALUES (?,?,?,?,?,?)";
 
@@ -122,4 +120,29 @@ public class UserDAO {
 
         return userToBeRegistered;
     }
+
+
+    public boolean login(String username, String password, User currentUser) throws SQLException, IOException {
+
+        String SQL = "SELECT * FROM ers_users WHERE ers_username = ? ";
+        Connection connection = ConnectionFactory.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(SQL);
+        preparedStatement.setString(1, username);
+
+        ResultSet rs = preparedStatement.executeQuery();
+
+        while(rs.next()){
+            currentUser.setUsername(rs.getString("ers_username"));
+            currentUser.setPassword(rs.getString("ers_password"));
+            currentUser.setId(rs.getInt("ers_users_id"));
+            currentUser.setFirst(rs.getString("user_first_name"));
+            currentUser.setLast(rs.getString("user_last_name"));
+            currentUser.setEmail(rs.getString("user_email"));
+        }
+
+        return false;
+    }
+
+
+
 }

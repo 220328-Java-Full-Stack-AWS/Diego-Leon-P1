@@ -76,4 +76,7 @@ public class ConnectionFactory {
         return connection;
     }
 
+    public static void close() throws SQLException {
+        connection.close();
+    }
 }

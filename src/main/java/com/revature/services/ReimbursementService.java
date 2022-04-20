@@ -2,24 +2,15 @@ package com.revature.services;
 
 import com.revature.models.Reimbursement;
 import com.revature.models.Status;
-import com.revature.models.User;
-import com.revature.repositories.ReimbursementDAO;
-import com.revature.repositories.UserDAO;
-import com.revature.services.AuthService;
 
-import javax.sql.rowset.serial.SerialBlob;
+import com.revature.repositories.ReimbursementDAO;
+
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.sql.Blob;
-import java.sql.Date;
+
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.Instant;
-import java.time.ZonedDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-import java.util.Scanner;
+
+import java.util.*;
 
 import static com.revature.services.AuthService.currentUser;
 
@@ -42,6 +33,10 @@ import static com.revature.services.AuthService.currentUser;
  */
 public class ReimbursementService {
 
+    public ReimbursementService() {
+        super();
+    }
+
     /**
      * <ul>
      *     <li>Should ensure that the user is logged in as a Finance Manager</li>
@@ -56,19 +51,24 @@ public class ReimbursementService {
      * The Resolver should be null. Additional fields may be null.
      * After processing, the reimbursement will have its status changed to either APPROVED or DENIED.
      */
-    public int process(int id) {
-        ///for Manager Access ONly
 
-        return 1;
+
+    public int process(int id, int status) {
+        ReimbursementDAO request = new ReimbursementDAO();
+        request.process(id, status);
+
+        return id;
     }
 
     /**
      * Should retrieve all reimbursements with the correct status.
      */
-    public List<Reimbursement> getReimbursementsByStatus(Status status) {
+    public List<Reimbursement> getReimbursementsByStatus(int status) {
+        ReimbursementDAO request = new ReimbursementDAO();
+        List<Reimbursement> list;
+        list = request.getByStatus(status);
 
-
-        return Collections.emptyList();
+        return list;
     }
 
 
@@ -120,10 +120,10 @@ public class ReimbursementService {
         return request.createRequest(requestTobeSubmitted);
     }
 
-    public Integer cancelByID(int reimbursementId) throws SQLException, IOException {
+    public int cancelByID(int reimbursementId) throws SQLException, IOException {
         ReimbursementDAO request = new ReimbursementDAO();
-
         request.cancelById(reimbursementId);
+
         return reimbursementId;
     }
 
@@ -171,8 +171,17 @@ public class ReimbursementService {
 
         model.setSubmitted(timestamp);
 
-        request.requestToBeEditted(model);
+        request.requestToBeEditted(model, id);
         return id;
+    }
+
+    public List<Reimbursement> getByUserId(int id) {
+        ReimbursementDAO request = new ReimbursementDAO();
+        List<Reimbursement> list;
+
+        list = request.getByUserId(id);
+
+        return list;
     }
 
 }

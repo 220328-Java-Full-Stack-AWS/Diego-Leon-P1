@@ -1,16 +1,13 @@
 package com.revature.repositories;
 
-import com.revature.exceptions.RegistrationUnsuccessfulException;
+
 import com.revature.models.Reimbursement;
-import com.revature.models.Status;
-import com.revature.models.User;
 import com.revature.util.ConnectionFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -32,7 +29,7 @@ public class ReimbursementDAO {
             ResultSet rs = preparedStatement.executeQuery();
             //next has to be called. it is a boolean. if there is something there it returns true and false if not
 
-            while(rs.next()){
+            while (rs.next()) {
                 request.setId(rs.getInt("reimb_id"));
                 request.setAmount(rs.getDouble("reimb_amount"));
                 request.setSubmitted(rs.getTimestamp("reimb_submitted"));
@@ -43,17 +40,18 @@ public class ReimbursementDAO {
 
 
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
         System.out.println("ID: " + request.getId() + "\nAmount: " + request.getAmount() + "\nDate Submitted: "
-               + request.getSubmitted() + "\nDate Resolved: " + request.getResolved() + "\nDescription: " + request.getDescription()
+                + request.getSubmitted() + "\nDate Resolved: " + request.getResolved() + "\nDescription: " + request.getDescription()
                 + "\nReceipt Number: " + request.getReceipt() + "\nSubmitted by: " + request.getAuthor());
 
         return Optional.empty();
     }
-////GEt by userID
+
+    ////GEt by userID
     public List<Reimbursement> getByUserId(int id) {
         List<Reimbursement> list = new LinkedList<>();
 
@@ -66,7 +64,45 @@ public class ReimbursementDAO {
             ResultSet rs = preparedStatement.executeQuery();
             //next has to be called. it is a boolean. if there is something there it returns true and false if not
 
-            while(rs.next()){
+            while (rs.next()) {
+                Reimbursement model = new Reimbursement();
+                model.setId(rs.getInt("reimb_id"));
+                model.setAmount(rs.getDouble("reimb_amount"));
+                model.setSubmitted(rs.getTimestamp("reimb_submitted"));
+                model.setResolved(rs.getTimestamp("reimb_resolved"));
+                model.setDescription(rs.getString("reimb_description"));
+                model.setReceipt(rs.getString("reimb_receipt"));
+                model.setAuthor(rs.getInt("reimb_author"));
+                model.setStatus(rs.getInt("reimb_status_id"));
+
+                list.add(model);
+                System.out.println("List");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+        return list;
+    }
+
+    /**
+     * Should retrieve a List of Reimbursements from the DB with
+     * the corresponding Status or an empty List if there are no matches.
+     */
+    public List<Reimbursement> getByStatus(int status) {
+        List<Reimbursement> list = new LinkedList<>();
+
+        try {
+            String SQL = "SELECT * FROM ers_reimbursement WHERE reimb_status_id = ?";
+            Connection connection = ConnectionFactory.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL);
+            preparedStatement.setInt(1, status);
+
+            ResultSet rs = preparedStatement.executeQuery();
+            //next has to be called. it is a boolean. if there is something there it returns true and false if not
+
+            while (rs.next()) {
                 Reimbursement model = new Reimbursement();
                 model.setId(rs.getInt("reimb_id"));
                 model.setAmount(rs.getDouble("reimb_amount"));
@@ -79,20 +115,10 @@ public class ReimbursementDAO {
 
                 list.add(model);
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
-
-
         return list;
-    }
-    /**
-     * Should retrieve a List of Reimbursements from the DB with
-     * the corresponding Status or an empty List if there are no matches.
-     */
-    public List<Reimbursement> getByStatus(Status status) {
-
-        return Collections.emptyList();
     }
 
     /**
@@ -133,9 +159,9 @@ public class ReimbursementDAO {
     }
 
 
-    public Reimbursement requestToBeEditted(Reimbursement requestTobeEditted) {
+    public Reimbursement requestToBeEditted(Reimbursement requestTobeEditted, int id) {
         String SQL = "UPDATE  ers_reimbursement SET reimb_amount =? ,reimb_submitted = ?,reimb_description =?,reimb_receipt =?,"
-                + " reimb_author = ?,reimb_type_id =?";
+                + " reimb_author = ?,reimb_type_id =? WHERE reimb_id = ?";
 
         try {
 
@@ -146,7 +172,7 @@ public class ReimbursementDAO {
             preparedStatement.setString(4, requestTobeEditted.getReceipt());
             preparedStatement.setInt(5, requestTobeEditted.getAuthor());
             preparedStatement.setInt(6, requestTobeEditted.getType());
-
+            preparedStatement.setInt(7, id);
 
             preparedStatement.executeUpdate();
 
@@ -158,8 +184,8 @@ public class ReimbursementDAO {
         return requestTobeEditted;
     }
 
-    public Reimbursement cancelById(int requestTobeCancelled) {
-        String SQL ="DELETE from ers_reimbursement where reimb_id = ?" ;
+    public int cancelById(int requestTobeCancelled) {
+        String SQL = "DELETE from ers_reimbursement where reimb_id = ?";
 
         try {
 
@@ -172,6 +198,25 @@ public class ReimbursementDAO {
             e.printStackTrace();
         }
 
-        return null;
+        return requestTobeCancelled;
     }
+
+    public int process(int id, int status) {
+            String SQL = "UPDATE  ers_reimbursement SET reimb_status_id = ? WHERE reimb_id = ?";
+
+        try {
+
+            PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(SQL);
+            preparedStatement.setInt(1, status);
+            preparedStatement.setInt(2, id);
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return id;
+    }
+
 }

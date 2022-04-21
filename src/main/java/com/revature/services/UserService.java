@@ -41,15 +41,15 @@ public class UserService {
 	 *     Should retrieve a User with the corresponding username or an empty optional if there is no match.
 	 * @return
 	 */
-	public Optional<Object> getByUsername(String username) throws SQLException, IOException {
-//		UserDAO user = new UserDAO();
-		Optional<User> model = this.user.getByUsername(username);
+	public User getByUsername(String username) throws SQLException, IOException {
 
-		System.out.println("ID: "+ model.get().getId() + "\nUsername: : " + model.get().getUsername() + "\nPassword: " + model.get().getPassword()
-				+ "\nName: " + model.get().getFirst() + " " + model.get().getLast() + "\nEmail: " + model.get().getEmail()
-				+ "\nRole: " + model.get().getRole());
+		User model = user.getByUsername(username);
 
-		return Optional.of(model);
+		System.out.println("ID: "+ model.getId() + "\nUsername: : " + model.getUsername() + "\nPassword: " + model.getPassword()
+				+ "\nName: " + model.getFirst() + " " + model.getLast() + "\nEmail: " + model.getEmail()
+				+ "\nRole: " + model.getRole());
+
+		return model;
 	}
 
 //	public Optional<Object> getByID(int id) throws SQLException, IOException {

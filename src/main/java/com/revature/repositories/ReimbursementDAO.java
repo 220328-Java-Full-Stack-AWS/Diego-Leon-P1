@@ -42,6 +42,8 @@ public class ReimbursementDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
 
         System.out.println("ID: " + request.getId() + "\nAmount: " + request.getAmount() + "\nDate Submitted: "
@@ -76,9 +78,11 @@ public class ReimbursementDAO {
                 model.setStatus(rs.getInt("reimb_status_id"));
 
                 list.add(model);
-                System.out.println("List");
+
             }
         } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
 
@@ -117,6 +121,8 @@ public class ReimbursementDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
         return list;
     }
@@ -152,6 +158,8 @@ public class ReimbursementDAO {
 
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
 
 
@@ -178,6 +186,8 @@ public class ReimbursementDAO {
 
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
 
 
@@ -195,6 +205,8 @@ public class ReimbursementDAO {
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
 
@@ -215,6 +227,8 @@ public class ReimbursementDAO {
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
 

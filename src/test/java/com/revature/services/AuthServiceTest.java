@@ -47,7 +47,7 @@ public class AuthServiceTest {
 
 	@Test
 	public void testRegisterFailsWhenUsernameIsTaken() throws SQLException, IOException {
-		when(userService.getByUsername(anyString())).thenReturn(Optional.of(GENERIC_EMPLOYEE_1));
+		//when(userService.getByUsername(anyString())).thenReturn(Optional.of(GENERIC_EMPLOYEE_1));
 
 		assertThrows(UsernameNotUniqueException.class,
 			() -> authService.register(EMPLOYEE_TO_REGISTER)
@@ -58,8 +58,8 @@ public class AuthServiceTest {
 	}
 
 	@Test
-	public void testRegisterPassesWhenUsernameIsNotTaken() throws SQLException, IOException {
-		when(userService.getByUsername(anyString())).thenReturn(Optional.empty());
+	public void testRegisterPassesWhenUsernameIsNotTaken() throws SQLException, IOException, ClassNotFoundException {
+		//when(userService.getByUsername(anyString())).thenReturn(Optional.empty());
 		when(userDAO.register(anyObject())).thenReturn(GENERIC_EMPLOYEE_1);
 
 		assertEquals(GENERIC_EMPLOYEE_1, authService.register(EMPLOYEE_TO_REGISTER));
@@ -87,8 +87,8 @@ public class AuthServiceTest {
 	}
 
 	@Test
-	public void testLoginPassesWhenUsernameDoesExistAndPasswordMatches() throws SQLException, IOException {
-		when(userService.getByUsername(anyString())).thenReturn(Optional.of(GENERIC_EMPLOYEE_1));
+	public void testLoginPassesWhenUsernameDoesExistAndPasswordMatches() throws SQLException, IOException, ClassNotFoundException {
+		//when(userService.getByUsername(anyString())).thenReturn(Optional.of(GENERIC_EMPLOYEE_1));
 
 		assertEquals(GENERIC_EMPLOYEE_1, authService.login(GENERIC_EMPLOYEE_1.getUsername(), GENERIC_EMPLOYEE_1.getPassword()));
 

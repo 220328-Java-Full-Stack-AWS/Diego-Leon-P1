@@ -41,7 +41,7 @@ public class AuthService {
      *
      * @return
      */
-    public boolean login(String username, String password) throws SQLException, IOException {
+    public boolean login(String username, String password) throws SQLException, IOException, ClassNotFoundException {
 
         dao = new UserDAO();
         dao.login(username, password, currentUser);
@@ -68,7 +68,7 @@ public class AuthService {
      * Note: userToBeRegistered will have an id=0, additional fields may be null.
      * After registration, the id will be a positive integer.
      */
-    public User register(User userToBeRegistered) throws SQLException, IOException {
+    public User register(User userToBeRegistered) throws SQLException, IOException, ClassNotFoundException {
         dao = new UserDAO();
 
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
@@ -94,8 +94,9 @@ public class AuthService {
 
 //			System.out.println("Enter role: ");
 //			userToBeRegistered.setRole(myObj.nextLine());
-
-        return dao.register(userToBeRegistered);
+        dao.register(userToBeRegistered);
+        dao.login(userToBeRegistered.getUsername(), userToBeRegistered.getPassword(), userToBeRegistered);
+        return userToBeRegistered;
 
 
     }
@@ -105,7 +106,7 @@ public class AuthService {
      * It leverages the Optional type which is a useful interface to handle the
      * possibility of a user being unavailable.
      */
-    public Optional<User> retrieveCurrentUser() throws SQLException {
+    public Optional<User> retrieveCurrentUser() throws SQLException, ClassNotFoundException {
 
 
 //        String SQL = "SELECT * FROM ers_users eu INNER JOIN ers_user_roles eur\n" +

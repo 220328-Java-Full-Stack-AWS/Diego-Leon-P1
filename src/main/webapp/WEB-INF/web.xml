@@ -15,15 +15,6 @@
     </listener>
 
 
-    <servlet-mapping>
-        <servlet-name>healthServelet</servlet-name>
-        <url-pattern>/health/</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>healthServelet</servlet-name>
-        <servlet-class>com.revature.servlets.HealthServelet</servlet-class>
-    </servlet>
 
     <servlet-mapping>
         <servlet-name>pingServlet</servlet-name>
@@ -33,6 +24,16 @@
     <servlet>
         <servlet-name>pingServlet</servlet-name>
         <servlet-class>com.revature.servlets.PingServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>userService</servlet-name>
+        <url-pattern>/user</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>userService</servlet-name>
+        <servlet-class>com.revature.servlets.UserServiceServlet</servlet-class>
     </servlet>
 
 </web-app>

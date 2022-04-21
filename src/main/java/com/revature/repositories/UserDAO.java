@@ -21,7 +21,7 @@ public class UserDAO {
     /**
      * Should retrieve a User from the DB with the corresponding username or an empty optional if there is no match.
      */
-    public Optional<User> getByUsername(String username) {
+    public User getByUsername(String username) {
         //should reference model here
         User model = new User();
 
@@ -32,7 +32,7 @@ public class UserDAO {
             preparedStatement.setString(1, username);
 
             ResultSet rs = preparedStatement.executeQuery();
-            //next has to be called. it is a boolean. if there is something there it returns true and false if not
+            //next has to be called. it is a boolean, if there is something there it returns true and false if not
 
             while(rs.next()){
                 model.setId(rs.getInt("ers_users_id"));
@@ -41,15 +41,15 @@ public class UserDAO {
                 model.setLast(rs.getString("user_last_name"));
                 model.setFirst(rs.getString("user_first_name"));
                 model.setEmail(rs.getString("user_email"));
-                //model.setRole();
-
-                // model.setRole(rs.getInt("user_role_id"));
 
             }
         }catch (SQLException e){
             e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
-        return Optional.of(model);
+
+        return model;
     }
 
 ////    //get by ID
@@ -114,15 +114,16 @@ public class UserDAO {
         }catch (SQLException e){
             e.printStackTrace();
             //throw new RegistrationUnsuccessfulException();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
-
 
 
         return userToBeRegistered;
     }
 
 
-    public boolean login(String username, String password, User currentUser) throws SQLException, IOException {
+    public boolean login(String username, String password, User currentUser) throws SQLException, IOException, ClassNotFoundException {
 
         String SQL = "SELECT * FROM ers_users WHERE ers_username = ? ";
         Connection connection = ConnectionFactory.getConnection();

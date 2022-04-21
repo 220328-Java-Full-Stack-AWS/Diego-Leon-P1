@@ -21,7 +21,7 @@ public class ConnectionFactoryTest {
     }
 
     @Test
-    public void testConnectionFactoryIsAbleToGetConnection() throws IOException, SQLException {
+    public void testConnectionFactoryIsAbleToGetConnection() throws IOException, SQLException, ClassNotFoundException {
         Connection conn = connectionFactory.getConnection();
 
         assertThat(conn, instanceOf(Connection.class));

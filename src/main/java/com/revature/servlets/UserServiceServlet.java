@@ -17,7 +17,7 @@ import java.util.Optional;
 public class UserServiceServlet extends HttpServlet {
     private UserService service;
     private ObjectMapper mapper;
-
+    private  User model;
 
     @Override
     public void init() throws ServletException {
@@ -35,7 +35,7 @@ public class UserServiceServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        User model = null;
+
         try {
             model = service.getByUsername(req.getHeader("user_name"));
         } catch (SQLException e) {

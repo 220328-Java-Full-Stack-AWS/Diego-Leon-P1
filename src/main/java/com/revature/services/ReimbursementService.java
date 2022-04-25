@@ -53,9 +53,9 @@ public class ReimbursementService {
      */
 
 
-    public int process(int id, int status, int userId) {
+    public int process(int id, int status, int resolverId) {
         ReimbursementDAO request = new ReimbursementDAO();
-        request.process(id, status, userId);
+        request.process(id, status, resolverId);
 
         return id;
     }
@@ -74,45 +74,45 @@ public class ReimbursementService {
 
     public Reimbursement request(Reimbursement requestTobeSubmitted) throws SQLException, IOException {
         ReimbursementDAO request = new ReimbursementDAO();
-
-        Scanner myObj = new Scanner(System.in);
-
-
-        System.out.println("Enter Amount: ");
-        requestTobeSubmitted.setAmount(Double.parseDouble(myObj.nextLine()));
-
-        System.out.println("Enter a description: ");
-        requestTobeSubmitted.setDescription(myObj.nextLine());
-
-        System.out.println("Enter receipt number: ");
-        requestTobeSubmitted.setReceipt(myObj.nextLine());
-
-
-        Boolean valid = false;
-        while (!valid) {
-            System.out.println("Enter type of Reimbusrsement: \n" +
-                    "1. Lodging\n" +
-                    "2. Travel\n" +
-                    "3. Food");
-
-            int type = myObj.nextInt();
-            if (type == 1) {
-                requestTobeSubmitted.setType(1);
-                valid = true;
-            } else if (type == 2) {
-                requestTobeSubmitted.setType(2);
-                valid = true;
-            } else if (type == 3) {
-                requestTobeSubmitted.setType(3);
-                valid = true;
-            } else {
-                System.out.println("Wrong type selected. Please try again.");
-            }
-        }
-        requestTobeSubmitted.setAuthor(currentUser.getId());
+//
+//        Scanner myObj = new Scanner(System.in);
+//
+//
+//        System.out.println("Enter Amount: ");
+//        requestTobeSubmitted.setAmount(Double.parseDouble(myObj.nextLine()));
+//
+//        System.out.println("Enter a description: ");
+//        requestTobeSubmitted.setDescription(myObj.nextLine());
+//
+//        System.out.println("Enter receipt number: ");
+//        requestTobeSubmitted.setReceipt(myObj.nextLine());
+//
+//
+//        Boolean valid = false;
+//        while (!valid) {
+//            System.out.println("Enter type of Reimbusrsement: \n" +
+//                    "1. Lodging\n" +
+//                    "2. Travel\n" +
+//                    "3. Food");
+//
+//            int type = myObj.nextInt();
+//            if (type == 1) {
+//                requestTobeSubmitted.setType(1);
+//                valid = true;
+//            } else if (type == 2) {
+//                requestTobeSubmitted.setType(2);
+//                valid = true;
+//            } else if (type == 3) {
+//                requestTobeSubmitted.setType(3);
+//                valid = true;
+//            } else {
+//                System.out.println("Wrong type selected. Please try again.");
+//            }
+//        }
+//        requestTobeSubmitted.setAuthor(currentUser.getId());
 
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        System.out.println(timestamp);
+//        System.out.println(timestamp);
 
         requestTobeSubmitted.setSubmitted(timestamp);
 

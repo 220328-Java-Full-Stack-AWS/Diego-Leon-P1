@@ -76,11 +76,11 @@ public class Driver {
                 }
 
 
-            } else if ((loggedIn) && (user.retrieveCurrentUser().get().getRole() == 1)) {
+            } else if ((loggedIn) && (user.retrieveCurrentUser().getRole() == 1)) {
                 System.out.println("Welcome to the ERS Application(Manager), " +
-                        user.retrieveCurrentUser().get().getFirst() + " " +
-                        user.retrieveCurrentUser().get().getLast() + "." +
-                        "Your username is: " + user.retrieveCurrentUser().get().getUsername());
+                        user.retrieveCurrentUser().getFirst() + " " +
+                        user.retrieveCurrentUser().getLast() + "." +
+                        "Your username is: " + user.retrieveCurrentUser().getUsername());
                 System.out.println("What would you like to do: " + "\n" +
                         "1. Approve Reimbursement Request" + "\n" +
                         "2. Deny Reimbursement Request" + "\n" +
@@ -106,7 +106,7 @@ public class Driver {
                     System.out.println("\nType the reimbursement ID to approve.");
                     Scanner choice1 = new Scanner(System.in);
                     int userChoice1 = Integer.parseInt(choice1.nextLine());
-                    reimbursement.process(userChoice1, 2, user.retrieveCurrentUser().get().getId());
+                    reimbursement.process(userChoice1, 2, user.retrieveCurrentUser().getId());
                 } else if (userChoice == 2) {
                     System.out.println("Denial Page\n\n");
                     reimbursement = new ReimbursementService();
@@ -122,7 +122,7 @@ public class Driver {
                     System.out.println("\nType the reimbursement ID to deny.");
                     Scanner choice1 = new Scanner(System.in);
                     int userChoice1 = Integer.parseInt(choice1.nextLine());
-                    reimbursement.process(userChoice1, 3,user.retrieveCurrentUser().get().getId());
+                    reimbursement.process(userChoice1, 3,user.retrieveCurrentUser().getId());
                 } else if (userChoice == 3) {
                     System.out.println("Filter Results\n");
                     System.out.println("Filter by: " + "\n" +
@@ -179,10 +179,10 @@ public class Driver {
                 }
             } else if (loggedIn) {
                 System.out.println("Welcome to the ERS Application, " +
-                        user.retrieveCurrentUser().get().getFirst() + " " +
-                        user.retrieveCurrentUser().get().getLast() + ".");
+                        user.retrieveCurrentUser().getFirst() + " " +
+                        user.retrieveCurrentUser().getLast() + ".");
                 if (justRegistered == true){
-                    System.out.println("\nYour username is: " + user.retrieveCurrentUser().get().getUsername());
+                    System.out.println("\nYour username is: " + user.retrieveCurrentUser().getUsername());
                 }
                 System.out.println("What would you like to do: " + "\n" +
                         "1. Submit Reimbursement Request" + "\n" +
@@ -200,9 +200,9 @@ public class Driver {
                     reimbursement.request(reimbursement1);
                 } else if (userChoice == 2) {
                     System.out.println("Cancellation Page");
-                    System.out.println(user.retrieveCurrentUser().get().getId());
+                    System.out.println(user.retrieveCurrentUser().getId());
                     reimbursement = new ReimbursementService();
-                    List<Reimbursement> list = reimbursement.getByUserId(user.retrieveCurrentUser().get().getId());
+                    List<Reimbursement> list = reimbursement.getByUserId(user.retrieveCurrentUser().getId());
                     for (Reimbursement each :
                             list) {
                         if (each.getStatus() == 1) {
@@ -221,7 +221,7 @@ public class Driver {
                     System.out.println("Submission History");
 
                     List<Reimbursement> list = reimbursement.getByUserId(user.retrieveCurrentUser()
-                            .get().getId());
+                            .getId());
                     for (Reimbursement each :
                             list) {
                         System.out.println("ID: " + each.getId() + "\nAmount: " + each.getAmount() + "\nDate Submitted: "
@@ -233,7 +233,7 @@ public class Driver {
                     System.out.println("Submission History");
                     reimbursement = new ReimbursementService();
                     List<Reimbursement> list = reimbursement.getByUserId(user.retrieveCurrentUser()
-                            .get().getId());
+                            .getId());
                     for (Reimbursement each :
                             list) {
                         if (each.getStatus() == 1) {

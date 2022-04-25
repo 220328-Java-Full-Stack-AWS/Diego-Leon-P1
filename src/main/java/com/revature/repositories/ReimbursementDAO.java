@@ -127,18 +127,6 @@ public class ReimbursementDAO {
         return list;
     }
 
-    /**
-     * <ul>
-     *     <li>Should Update an existing Reimbursement record in the DB with the provided information.</li>
-     *     <li>Should throw an exception if the update is unsuccessful.</li>
-     *     <li>Should return a Reimbursement object with updated information.</li>
-     * </ul>
-     */
-    public Reimbursement update(Reimbursement unprocessedReimbursement) {
-
-        return null;
-    }
-
     public Reimbursement createRequest(Reimbursement requestTobeSubmitted) {
         String SQL = "INSERT INTO ers_reimbursement (reimb_amount,reimb_submitted,reimb_description,reimb_receipt,"
                 + " reimb_author,reimb_type_id ) VALUES (?,?, ?, ?, ?,? )";
@@ -213,14 +201,14 @@ public class ReimbursementDAO {
         return requestTobeCancelled;
     }
 
-    public int process(int id, int status, int userId) {
+    public int process(int id, int status, int resolverId) {
             String SQL = "UPDATE  ers_reimbursement SET reimb_status_id = ?, reimb_resolver = ?  WHERE reimb_id = ?";
 
         try {
 
             PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(SQL);
             preparedStatement.setInt(1, status);
-            preparedStatement.setInt(2, userId);
+            preparedStatement.setInt(2, resolverId);
             preparedStatement.setInt(3, id);
 
 

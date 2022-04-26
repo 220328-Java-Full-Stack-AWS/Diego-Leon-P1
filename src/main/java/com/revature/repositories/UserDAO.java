@@ -140,7 +140,7 @@ public class UserDAO {
             currentUser.setLast(rs.getString("user_last_name"));
             currentUser.setEmail(rs.getString("user_email"));
         }
-
+        System.out.println("Logged IN");
         return false;
     }
 

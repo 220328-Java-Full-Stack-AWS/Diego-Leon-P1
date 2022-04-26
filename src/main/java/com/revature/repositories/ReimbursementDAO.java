@@ -135,7 +135,7 @@ public class ReimbursementDAO {
 
             PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(SQL);
             preparedStatement.setDouble(1, requestTobeSubmitted.getAmount());
-            preparedStatement.setTimestamp(2, requestTobeSubmitted.getSubmitted());
+            preparedStatement.setString(2, requestTobeSubmitted.getSubmitted().toString());
             preparedStatement.setString(3, requestTobeSubmitted.getDescription());
             preparedStatement.setString(4, requestTobeSubmitted.getReceipt());
             preparedStatement.setInt(5, requestTobeSubmitted.getAuthor());

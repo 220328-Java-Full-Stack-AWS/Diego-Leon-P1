@@ -45,9 +45,9 @@ public class UserService {
 
 		User model = user.getByUsername(username);
 
-		System.out.println("ID: "+ model.getId() + "\nUsername: : " + model.getUsername() + "\nPassword: " + model.getPassword()
-				+ "\nName: " + model.getFirst() + " " + model.getLast() + "\nEmail: " + model.getEmail()
-				+ "\nRole: " + model.getRole());
+//		System.out.println("ID: "+ model.getId() + "\nUsername: : " + model.getUsername() + "\nPassword: " + model.getPassword()
+//				+ "\nName: " + model.getFirst() + " " + model.getLast() + "\nEmail: " + model.getEmail()
+//				+ "\nRole: " + model.getRole());
 
 		return model;
 	}

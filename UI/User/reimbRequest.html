@@ -6,56 +6,60 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
-    <link rel="stylesheet" href="styles.css">
-    <title>ERS Registration</title>
+    <link rel="stylesheet" href="userStyles.css">
+    <title>User Reimbursement Submision</title>
 </head>
 
 <body>
 
     <div class="container">
-        <h1>Register</h1>
+        <h1>Submision</h1>
         <form>
             <div class="form-control">
-                <input type="text" id="fname" required>
-                <label>First Name</label>
+                <input type="text" id="amount" required>
+                <label>Amount</label>
             </div>
             <div class="form-control">
-                <input type="text" id="lname" required>
-                <label>Last Name</label>
+                <input type="text" id="description" required>
+                <label>Description</label>
             </div>
             <div class="form-control">
-                <input type="email" id="email" required>
-                <label>Email</label>
+                <input type="text" id="receipt" required>
+                <label>Receipt Number</label>
             </div>
             <div class="form-control">
-                <input type="password" id="password" required>
-                <label>Password</label>
+                <label>Choose the type of requet: </label>
+                <select name="type" id="type">
+                    <option value="" selected disabled hidden>Choose here</option>
+                    <option value="1">Lodging</option>
+                    <option value="2">Travel</option>
+                    <option value="3">Food</option>
+                </select>
             </div>
-
-            <button type="button" class="btn" onclick="submitForm()">Register</button>
+            <button type="button" class="btn" onclick="submitForm()">Submit</button>
 
         </form>
     </div>
 
 
-    <script src="./authScript.js"></script>
+    <script src="./userScript.js"></script>
 
     <script>
         async function submitForm() {
 
 
-            let newUser = {
-                first: document.getElementById("fname").value,
-                last: document.getElementById("lname").value,
-                email: document.getElementById("email").value,
-                password: document.getElementById("password").value,
+            let newRequest = {
+                amount: document.getElementById("amount").value,
+                description: document.getElementById("description").value,
+                receipt: document.getElementById("receipt").value,
+                type: document.getElementById("type").value,
             }
 
 
-            console.log(newUser);//fact finding
+            console.log(newRequest);//fact finding
 
             //Make our asynchronous API call
-            let response = await registerNewUser(newUser);
+            let response = await submitNewRequest(newRequest);
 
             // console.log("Response: ", response);//fact finding
             // console.log("Response JSON: ", response.json());//we should delete these later
@@ -71,15 +75,15 @@
                 In this case we are getting a token that contains the username string, 
                 and storing it in localStorage.
                 */
-                let token = response.headers.get("authToken");
-                console.log("authToken received: ", token);//fact finding
-                localStorage.setItem("authToken", token);
+                // let token = response.headers.get("authToken");
+                // console.log("authToken received: ", token);//fact finding
+                // localStorage.setItem("authToken", token);
+                alert("Request Submitted!");
                 //navigate the window to the landing page
-                window.location.href = "/userLandingPage.html";
-
+                window.location.href = "./userLandingPage.html";
 
             } else {
-                alert("Unable to submit Request!");
+                alert("Unable to register!");
             }
         }
 

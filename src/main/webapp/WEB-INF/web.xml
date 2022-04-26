@@ -32,6 +32,7 @@
     </servlet-mapping>
 
     <servlet>
+
         <servlet-name>userService</servlet-name>
         <servlet-class>com.revature.servlets.UserServiceServlet</servlet-class>
     </servlet>
@@ -57,6 +58,8 @@
         <filter-name>CorsFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+
+
     <!-- /CORS FILTER -->
 
 </web-app>

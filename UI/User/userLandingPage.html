@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
+    <link rel="stylesheet" href="userStyles.css">
+    <title>User Reimbursement Submision</title>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Welcome</h1>
+        <form>
+
+            <div class="form-control">
+                <label>What would you like to do: </label>
+                <select name="type" id="type">
+                    <option value="" selected disabled hidden>Choose here</option>
+                    <option value="1">Submit a Request for Reimbursement.</option>
+                    <option value="2">View my Pending and Completed Requests</option>
+
+                </select>
+            </div>
+            <button type="button" class="btn" onclick="submitForm()">Submit</button>
+
+        </form>
+    </div>
+
+
+    <script src="./userScript.js"></script>
+
+    <script>
+        async function submitForm() {
+
+            if (document.getElementById("type").value == 1) {
+
+                window.location.href = "./reimbRequest.html";
+
+            } else if (document.getElementById("type").value == 2) {
+                window.location.href = "./viewPending.html";
+
+            }
+            else {
+                alert("Unable to register!");
+            }
+        }
+
+    </script>
+</body>
+
+</html>

@@ -7,60 +7,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
     <link rel="stylesheet" href="styles.css">
-    <title>ERS Registration</title>
+    <title>ERS Login</title>
 </head>
 
 <body>
 
     <div class="container">
-        <h1>Register</h1>
+        <h1>Please Login</h1>
         <form>
             <div class="form-control">
-                <input type="text" id="fname" required>
-                <label>First Name</label>
+                <input type="text" id="username" required>
+                <label>Username</label>
             </div>
             <div class="form-control">
-                <input type="text" id="lname" required>
-                <label>Last Name</label>
-            </div>
-            <div class="form-control">
-                <input type="email" id="email" required>
-                <label>Email</label>
-            </div>
-            <div class="form-control">
-                <input type="password" id="password" required>
+                <input type="paswword" id="password" required>
                 <label>Password</label>
             </div>
 
-            <button type="button" class="btn" onclick="submitForm()">Register</button>
+            <button type="button" class="btn" onclick="submitForm()">Login</button>
 
         </form>
     </div>
 
 
-    <script src="./authScript.js"></script>
+    <script src="./script.js"></script>
+
 
     <script>
         async function submitForm() {
 
 
             let newUser = {
-                first: document.getElementById("fname").value,
-                last: document.getElementById("lname").value,
-                email: document.getElementById("email").value,
+                username: document.getElementById("username").value,
                 password: document.getElementById("password").value,
+
             }
 
 
             console.log(newUser);//fact finding
 
             //Make our asynchronous API call
-            let response = await registerNewUser(newUser);
+            let response = await logInUser(newUser);
 
             // console.log("Response: ", response);//fact finding
             // console.log("Response JSON: ", response.json());//we should delete these later
 
-            if (response.status == 201) {
+            if (response.status == 200) {
                 /*
                 Here we are retyrieving the authToken header, which contains our username as
                 passed back from the server. This way we can use it to identify ourselves in 
@@ -74,16 +66,17 @@
                 let token = response.headers.get("authToken");
                 console.log("authToken received: ", token);//fact finding
                 localStorage.setItem("authToken", token);
-                //navigate the window to the landing page
-                window.location.href = "/userLandingPage.html";
-
+                alert("Login Succesful.");
+                // navigate the window to the landing page
+                window.location.href = "./User/userLandingPage.html";
 
             } else {
-                alert("Unable to submit Request!");
+                alert("Unable to Log In! Username and/or Password do not match.");
             }
         }
 
     </script>
+
 </body>
 
 </html>

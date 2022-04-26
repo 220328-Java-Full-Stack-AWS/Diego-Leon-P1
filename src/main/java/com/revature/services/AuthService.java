@@ -71,19 +71,6 @@ public class AuthService {
     public User register(User userToBeRegistered) throws SQLException, IOException, ClassNotFoundException {
         dao = new UserDAO();
 
-//        Scanner myObj = new Scanner(System.in);  // Create a Scanner object
-//
-//        System.out.println("Enter First name: ");
-//        userToBeRegistered.setFirst(myObj.nextLine());// Read user input
-//
-//        System.out.println("Enter Last name: ");
-//        userToBeRegistered.setLast(myObj.nextLine());
-//
-//        System.out.println("Enter email: ");
-//        userToBeRegistered.setEmail(myObj.nextLine()); // Read user input
-//
-//        System.out.println("Enter password: ");
-//        userToBeRegistered.setPassword(myObj.nextLine());
 
         Random rand = new Random();
         int id = (int) (1000 + (Math.random() * 10000));
@@ -92,12 +79,9 @@ public class AuthService {
         userToBeRegistered.setId(id);
         userToBeRegistered.setUsername(userName);
 
-//			System.out.println("Enter role: ");
-//			userToBeRegistered.setRole(myObj.nextLine());
         dao.register(userToBeRegistered);
-        dao.login(userToBeRegistered.getUsername(), userToBeRegistered.getPassword(), userToBeRegistered);
-        return userToBeRegistered;
 
+        return userToBeRegistered;
 
     }
 
@@ -109,8 +93,6 @@ public class AuthService {
     public User retrieveCurrentUser() throws SQLException, ClassNotFoundException {
 
 
-//        String SQL = "SELECT * FROM ers_users eu INNER JOIN ers_user_roles eur\n" +
-//                "ON eur.ers_user_role_id = eu.user_role_id WHERE eu.ers_username = ?";
         String SQL = "SELECT * FROM ers_users WHERE ers_username = ? ";
         Connection connection = ConnectionFactory.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(SQL);

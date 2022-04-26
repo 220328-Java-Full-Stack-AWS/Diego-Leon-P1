@@ -2,7 +2,10 @@ package com.revature.servlets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.models.Reimbursement;
+import com.revature.models.User;
 import com.revature.services.ReimbursementService;
+import com.revature.services.UserService;
+import org.postgresql.gss.GSSOutputStream;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -19,8 +22,9 @@ public class ReimbursementServiceServlet extends HttpServlet {
     String description, receipt;
     Double amount;
     Integer author, typeId;
-    Integer ID;
+    String userName;
     Reimbursement model = new Reimbursement();
+    UserService userService;
 
 
     @Override
@@ -43,13 +47,17 @@ public class ReimbursementServiceServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        System.out.println("in REIMB doGEt");
         int choice = Integer.parseInt(req.getHeader("case"));
         switch (choice) {
             case 1:
-                list = service.getByUserId(Integer.parseInt(req.getHeader("ID")));
+                System.out.println("in case 1");
+                list = service.getByUserId(Integer.parseInt(req.getHeader("authToken")));
+                System.out.println(list);
                 String json = mapper.writeValueAsString(list);
                 resp.setContentType("application/json");
-                resp.getWriter().print(json);
+                resp.getWriter().write(json);
+                System.out.println("before status");
                 resp.setStatus(200);
                 break;
             case 2:
@@ -66,25 +74,20 @@ public class ReimbursementServiceServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // super.doPost(req, resp);
 
-        amount = Double.parseDouble(req.getHeader("amount"));
-        description = req.getHeader("description");
-        receipt = req.getHeader("receipt");
-        author = Integer.parseInt(req.getHeader("author"));
-        typeId = Integer.parseInt(req.getHeader("typeId"));
+        model = mapper.readValue(req.getInputStream(), Reimbursement.class);
+        model.setAuthor(Integer.parseInt(req.getHeader("authToken")));
 
-        model.setAmount(amount);
-        model.setDescription(description);
-        model.setReceipt(receipt);
-        model.setAuthor(author);
-        model.setType(typeId);
+
 
         try {
+            resp.setStatus(201);
+            System.out.println(model);
             service.request(model);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
     }
 
     @Override
@@ -95,12 +98,12 @@ public class ReimbursementServiceServlet extends HttpServlet {
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
        // super.doDelete(req, resp);
-        ID = Integer.parseInt(req.getHeader("ID"));
-        try {
-            service.cancelByID(ID);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+//        ID = Integer.parseInt(req.getHeader("ID"));
+//        try {
+//            service.cancelByID(ID);
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
 
     }
 

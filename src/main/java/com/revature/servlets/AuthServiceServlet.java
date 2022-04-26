@@ -17,13 +17,18 @@ import java.util.Optional;
 public class AuthServiceServlet extends HttpServlet {
 
     AuthService authService = new AuthService();
+    UserService userService = new UserService();
     User user = new User();
+    User userCheck = new User();
     String first;
     String last;
     String email;
     String password;
     String user_name;
-    private ObjectMapper mapper;
+    private ObjectMapper mapper = new ObjectMapper();
+
+    public AuthServiceServlet() throws SQLException, IOException {
+    }
 
     @Override
     public void init() throws ServletException {
@@ -57,10 +62,8 @@ public class AuthServiceServlet extends HttpServlet {
         switch (choice) {
             case 1:
 
-                ObjectMapper mapper = new ObjectMapper();
                 user = mapper.readValue(req.getInputStream(), User.class);
                 resp.setStatus(201);
-                System.out.println(user);
                 try {
                     authService.register(user);
                 } catch (SQLException e) {
@@ -70,17 +73,33 @@ public class AuthServiceServlet extends HttpServlet {
                 }
                 break;
             case 2:
-                 user_name = req.getHeader("user_name");
-                 password = req.getHeader("password");
 
+
+                 user = mapper.readValue(req.getInputStream(), User.class);
                 try {
-                    authService.login(user_name,password);
+                    userCheck = userService.getByUsername(user.getUsername());
+
                 } catch (SQLException e) {
                     e.printStackTrace();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
                 }
+
+                System.out.println("in case 2");
+                if(userCheck != null && userCheck.getPassword().equals(user.getPassword())) {
+                    resp.setStatus(200);
+                    resp.getWriter().print(new ObjectMapper().writeValueAsString(userCheck));
+                    resp.setHeader("access-control-expose-headers", "authToken");
+                    resp.setHeader("authToken", String.valueOf(userCheck.getId()));
+
+
+                } else {
+                    resp.setStatus(401);
+                }
+                break;
+            default:
+                resp.setStatus(400);
+                break;
         }
+
     }
 
 

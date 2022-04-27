@@ -6,35 +6,32 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
-    <link rel="stylesheet" href="userStyles.css">
-    <title>User Reimbursement Submision</title>
+    <link rel="stylesheet" href="adminStyles.css">
+    <title>Admin</title>
 </head>
 
 <body>
 
     <div class="container">
-        <h1>Welcome</h1>
+        <h1>Welcome Admin</h1>
         <form>
 
             <div class="form-control">
                 <label>What would you like to do: </label>
                 <select name="type" id="type">
                     <option value="" selected disabled hidden>Choose here</option>
-                    <option value="1">Submit a Request for Reimbursement.</option>
+                    <option value="1">View Requests</option>
                     <option value="2">View my Pending and Completed Requests</option>
 
                 </select>
             </div>
+            <button type="button" class="btn" onclick="submitForm()">Submit</button>
 
-            <div class="form-control">
-                <button type="button" class="btn" onclick="submitForm()">Submit</button>
-            </div>
-            <div class="form-control">
-                <button type="button" class="btn" onclick="logOutUser()">Logout</button>
-            </div>
         </form>
     </div>
 
+
+    <script src="./adminScript.js"></script>
 
     <script>
         async function submitForm() {
@@ -52,14 +49,7 @@
             }
         }
 
-        function logOutUser() {
-
-            localStorage.clear();
-            window.location.href = "../index.html";
-        }
-
     </script>
-
 </body>
 
 </html>

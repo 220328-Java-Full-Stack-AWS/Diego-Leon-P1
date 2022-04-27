@@ -13,7 +13,7 @@
 <body>
 
     <div class="container">
-        <h1>Submision</h1>
+        <h1>Update Submission</h1>
         <form>
             <div class="form-control">
                 <input type="text" id="amount" required>
@@ -52,7 +52,7 @@
         async function submitForm() {
 
 
-            let newRequest = {
+            let updatedRequest = {
                 amount: document.getElementById("amount").value,
                 description: document.getElementById("description").value,
                 receipt: document.getElementById("receipt").value,
@@ -60,41 +60,29 @@
             }
 
 
-            console.log(newRequest);//fact finding
+            console.log(updatedRequest);//fact finding
 
             //Make our asynchronous API call
-            let response = await submitNewRequest(newRequest);
+            let response = await updateRequest(updatedRequest);
 
-            // console.log("Response: ", response);//fact finding
-            // console.log("Response JSON: ", response.json());//we should delete these later
 
-            if (response.status == 201) {
-                /*
-                Here we are retyrieving the authToken header, which contains our username as
-                passed back from the server. This way we can use it to identify ourselves in 
-                subsequent API calls.
-                For this to work, you must send back a token in the header of the response
-                The key should match the shown key name "authToken" and the value should be
-                a string you can use to locally store information about the logged in user.
-                In this case we are getting a token that contains the username string, 
-                and storing it in localStorage.
-                */
-                // let token = response.headers.get("authToken");
-                // console.log("authToken received: ", token);//fact finding
-                // localStorage.setItem("authToken", token);
+            if (response.status == 200) {
+
                 alert("Request Submitted!");
-                //navigate the window to the landing page
-                window.location.href = "./userLandingPage.html";
+
+                window.location.href = "./viewPending.html";
 
             } else {
-                alert("Unable to register!");
+                alert("Unable to edit!");
             }
         }
+
         function landingPage() {
 
             localStorage.clear();
             window.location.href = "./userLandingPage.html";
         }
+
 
     </script>
 </body>

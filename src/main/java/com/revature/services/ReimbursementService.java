@@ -90,44 +90,9 @@ public class ReimbursementService {
         return reimbursementId;
     }
 
-    public int requestToBeEditted(int id) throws SQLException, IOException {
+    public int requestToBeEditted(int id, Reimbursement model) throws SQLException, IOException {
         ReimbursementDAO request = new ReimbursementDAO();
-        Reimbursement model = new Reimbursement();
-        Scanner myObj = new Scanner(System.in);
 
-
-        System.out.println("Enter Amount: ");
-        model.setAmount(Double.parseDouble(myObj.nextLine()));
-
-        System.out.println("Enter a description: ");
-        model.setDescription(myObj.nextLine());
-
-        System.out.println("Enter receipt number: ");
-        model.setReceipt(myObj.nextLine());
-
-
-        Boolean valid = false;
-        while (!valid) {
-            System.out.println("Enter type of Reimbusrsement: \n" +
-                    "1. Lodging\n" +
-                    "2. Travel\n" +
-                    "3. Food");
-
-            int type = myObj.nextInt();
-            if (type == 1) {
-                model.setType(1);
-                valid = true;
-            } else if (type == 2) {
-                model.setType(2);
-                valid = true;
-            } else if (type == 3) {
-                model.setType(3);
-                valid = true;
-            } else {
-                System.out.println("Wrong type selected. Please try again.");
-            }
-        }
-        model.setAuthor(currentUser.getId());
 
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         System.out.println(timestamp);

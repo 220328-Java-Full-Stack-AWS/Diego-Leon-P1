@@ -1,11 +1,11 @@
-let reimbServiceURl = "http://localhost:8080/Diego-Leon-P1/Reimbursement";
+let authServiceURl = "http://localhost:8080/Diego-Leon-P1/Reimbursement";
 
 
 
 async function submitNewRequest(newRequest) {
 
     let response = await fetch(
-        reimbServiceURl,
+        authServiceURl,
         {
             method: "POST",
             headers: {
@@ -25,7 +25,7 @@ async function submitNewRequest(newRequest) {
 async function getPendingRequests() {
 
     let response = await fetch(
-        reimbServiceURl,
+        authServiceURl,
         {
             method: "GET",
             headers: {
@@ -44,7 +44,7 @@ async function getPendingRequests() {
 async function deletingRequest(reimbID) {
 
     let response = await fetch(
-        reimbServiceURl,
+        authServiceURl,
         {
             method: "DELETE",
             headers: {
@@ -60,7 +60,7 @@ async function deletingRequest(reimbID) {
 async function getRequestbyID(reimbID) {
 
     let response = await fetch(
-        reimbServiceURl,
+        authServiceURl,
         {
             method: "GET",
             headers: {
@@ -76,7 +76,7 @@ async function getRequestbyID(reimbID) {
 async function updateRequest(updatedRequest) {
 
     let response = await fetch(
-        reimbServiceURl,
+        authServiceURl,
         {
             method: "PUT",
             headers: {
@@ -92,4 +92,3 @@ async function updateRequest(updatedRequest) {
     localStorage.removeItem('localID')
     return response;
 }
-

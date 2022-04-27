@@ -16,6 +16,12 @@ async function logInUser(newUser) {
             body: JSON.stringify(newUser)
         }
     );
-    
+
     return response;
+}
+
+function logOutUser() {
+
+    localStorage.clear();
+    window.location.href = "./index.html";
 }

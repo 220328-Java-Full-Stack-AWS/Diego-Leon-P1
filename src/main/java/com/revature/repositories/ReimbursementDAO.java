@@ -57,6 +57,8 @@ public class ReimbursementDAO {
     public List<Reimbursement> getByUserId(int id) {
         List<Reimbursement> list = new LinkedList<>();
 
+
+
         try {
             String SQL = "SELECT * FROM ers_reimbursement WHERE reimb_author = ?";
             Connection connection = ConnectionFactory.getConnection();

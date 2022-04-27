@@ -78,8 +78,6 @@ public class ReimbursementServiceServlet extends HttpServlet {
         model = mapper.readValue(req.getInputStream(), Reimbursement.class);
         model.setAuthor(Integer.parseInt(req.getHeader("authToken")));
 
-
-
         try {
             resp.setStatus(201);
             System.out.println(model);
@@ -92,19 +90,34 @@ public class ReimbursementServiceServlet extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPut(req, resp);
+//        super.doPut(req, resp);
+        System.out.println("IN doPut");
+        System.out.println((req.getHeader("reimbursement")));
+        model = new ObjectMapper().readValue(req.getInputStream(), Reimbursement.class);
+
+        model.setId((Integer.parseInt(req.getHeader("reimbursement"))));
+        model.setAuthor((Integer.parseInt(req.getHeader("authToken"))));
+
+        System.out.println(model);
+        try {
+            service.requestToBeEditted(model.getId(), model);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        resp.setStatus(200);
     }
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-       // super.doDelete(req, resp);
-//        ID = Integer.parseInt(req.getHeader("ID"));
-//        try {
-//            service.cancelByID(ID);
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-
+//        super.doDelete(req, resp);
+        System.out.println("IN DELETE");
+       int ID = Integer.parseInt(req.getHeader("reimbursement"));
+        try {
+            service.cancelByID(ID);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        resp.setStatus(200);
     }
 
 }

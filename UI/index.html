@@ -20,11 +20,17 @@
                 <label>Username</label>
             </div>
             <div class="form-control">
-                <input type="paswword" id="password" required>
+                <input type="password" id="password" required>
                 <label>Password</label>
             </div>
 
-            <button type="button" class="btn" onclick="submitForm()">Login</button>
+            <input type="submit" class="btn" value="Login">
+
+
+            <div class="form-control">
+
+                <a href="./Auth/register.html" style="color:black;"> No account? Click here to Register.</a>
+            </div>
 
         </form>
     </div>
@@ -33,21 +39,29 @@
     <script src="./script.js"></script>
 
 
-    <script>
-        async function submitForm() {
 
+
+    <script>
+        const form = document.querySelector('form')
+        form.onsubmit = (e) => {
+            e.preventDefault()
+            submitForm()
+        }
+
+        async function submitForm() {
 
             let newUser = {
                 username: document.getElementById("username").value,
                 password: document.getElementById("password").value,
 
             }
-
+            let roleToken;
 
             console.log(newUser);//fact finding
 
             //Make our asynchronous API call
             let response = await logInUser(newUser);
+
 
             // console.log("Response: ", response);//fact finding
             // console.log("Response JSON: ", response.json());//we should delete these later
@@ -63,12 +77,23 @@
                 In this case we are getting a token that contains the username string, 
                 and storing it in localStorage.
                 */
-                let token = response.headers.get("authToken");
-                console.log("authToken received: ", token);//fact finding
-                localStorage.setItem("authToken", token);
-                alert("Login Succesful.");
-                // navigate the window to the landing page
-                window.location.href = "./User/userLandingPage.html";
+                response.json().then(data => {
+                    console.log(data.role);
+                    roleToken = data.role;
+
+
+                    let token = response.headers.get("authToken");
+
+                    localStorage.setItem("authToken", token);
+                    localStorage.setItem("role", roleToken);
+                    alert("Login Succesful.");
+                    // navigate the window to the landing page
+                    if (roleToken == 1) {
+                        window.location.href = "./Admin/adminLandingPage.html";
+                    } else {
+                        window.location.href = "./User/userLandingPage.html";
+                    }
+                })
 
             } else {
                 alert("Unable to Log In! Username and/or Password do not match.");

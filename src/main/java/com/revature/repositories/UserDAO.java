@@ -41,6 +41,7 @@ public class UserDAO {
                 model.setLast(rs.getString("user_last_name"));
                 model.setFirst(rs.getString("user_first_name"));
                 model.setEmail(rs.getString("user_email"));
+                model.setRole(rs.getInt("user_role_id"));
 
             }
         }catch (SQLException e){

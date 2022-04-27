@@ -6,22 +6,37 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
-    <link rel="stylesheet" href="userStyles.css">
+    <link rel="stylesheet" href="adminStyles.css">
     <title>Pending Requests</title>
 </head>
 
 <body>
 
     <div class="container">
-        <h1>Pending Requests</h1>
+        <h1>Requests</h1>
         <form>
 
             <div class="form-control">
                 <label>What would you like to do: </label>
-                <select name="type" id="type">
+                <select name="type" id="status">
                     <option value="" selected disabled hidden>Choose here</option>
-                    <option value="1">Edit Request</option>
-                    <option value="2">Cancel Request</option>
+                    <option value="1">Filter by Pending</option>
+                    <option value="2">Filter by Approved</option>
+                    <option value="3">Filter by Denied</option>
+                </select>
+
+            </div>
+            <div class="form-control">
+                <button type="button" class="btn" onclick="generateTable()">Get Table</button>
+                <p id="showData"></p>
+            </div>
+            <div class="form-control">
+                <label>Approve or Deny: </label>
+                <select name="type" id="decision">
+                    <option value="" selected disabled hidden>Choose here</option>
+                    <option value="2">Approve</option>
+                    <option value="3">Deny</option>
+
                 </select>
 
             </div>
@@ -29,10 +44,7 @@
                 <input type="text" id="reimbId" placeholder="Reimbursement ID" required>
             </div>
             <button type="button" class="btn" onclick="submitForm()">Submit</button>
-            <div class="form-control">
-                <button type="button" class="btn" onclick="generateTable()">Get Table</button>
-                <p id="showData"></p>
-            </div>
+
             <div class="form-control">
                 <button type="button" class="btn" onclick="landingPage()">Home</button>
             </div>
@@ -41,13 +53,15 @@
     </div>
 
 
-    <script src="./userScript.js"></script>
+    <script src="./adminScript.js"></script>
 
     <script>
 
         async function generateTable() {
 
-            let response = await getPendingRequests();
+            let status = parseInt(document.getElementById("status").value);
+            console.log(status)
+            let response = await getRequests(status);
             //let list = response.json();
 
             // console.log(response.text().)
@@ -106,7 +120,7 @@
 
 
             } else {
-                alert("Unable to generate table!");
+                alert("Unable to register!");
             }
 
 
@@ -116,27 +130,42 @@
 
 
 
-            if (document.getElementById("type").value == 1) {
 
-                localStorage.setItem("localID", document.getElementById("reimbId").value);
+            let status = document.getElementById("decision").value;
+            let reimbId = document.getElementById("reimbId").value;
+            let isPending = 0;
 
-                window.location.href = "./reimbEdit.html";
-                console.log(JSON.parse(localStorage.getItem('localID')))
+            let response = await getRequests(1);
+            //let list = response.json();
+            console.log("reimb if:" + reimbId)
+            // console.log(response.text().)
+            response.json().then(data => {
+                console.log(data[1].id);
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].id == reimbId) {
+                        isPending = 1;
+                        console.log("true")
+                        console.log(status)
+                    }
+                }
 
-            } else if (document.getElementById("type").value == 2) {
-                deletingRequest(document.getElementById("reimbId").value)
-                alert("Deleted");
-            }
-            else {
-                alert("Unable to register!");
-            }
+
+                if (status == 2 && isPending == 1) {
+                    processRequest(reimbId, status);
+                } else if (status == 3 && isPending == 1) {
+                    processRequest(reimbId, status);
+                }
+                else {
+                    alert("Unable to process request, request is not pending or does not exist!");
+                }
+            });
         }
 
 
         function landingPage() {
 
             localStorage.clear();
-            window.location.href = "./userLandingPage.html";
+            window.location.href = "./adminLandingPage.html";
         }
 
     </script>

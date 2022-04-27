@@ -213,9 +213,8 @@ public class ReimbursementDAO {
             preparedStatement.setInt(2, resolverId);
             preparedStatement.setInt(3, id);
 
-
             preparedStatement.executeUpdate();
-
+            System.out.println(preparedStatement.executeUpdate());
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {

@@ -5,6 +5,7 @@ import com.revature.models.User;
 import com.revature.repositories.UserDAO;
 import com.revature.services.AuthService;
 import com.revature.services.UserService;
+import org.postgresql.util.PSQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -61,19 +62,24 @@ public class AuthServiceServlet extends HttpServlet {
         int choice = Integer.parseInt(req.getHeader("case"));
         switch (choice) {
             case 1:
-
-                user = mapper.readValue(req.getInputStream(), User.class);
-                resp.setStatus(201);
                 try {
-                    authService.register(user);
+                    user = mapper.readValue(req.getInputStream(), User.class);
+                    user = authService.register(user);
+                    userCheck = userService.getByUsername(user.getUsername());
+                    resp.getWriter().print(new ObjectMapper().writeValueAsString(user));
+                    resp.setHeader("access-control-expose-headers", "authToken");
+                    resp.setHeader("authToken", String.valueOf(userCheck.getId()));
                 } catch (SQLException e) {
+                    System.out.println("in exception");
+                    resp.setStatus(406);
                     e.printStackTrace();
+                    return;
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
+                resp.setStatus(201);
                 break;
             case 2:
-
 
                  user = mapper.readValue(req.getInputStream(), User.class);
                 try {
@@ -89,7 +95,8 @@ public class AuthServiceServlet extends HttpServlet {
                     resp.getWriter().print(new ObjectMapper().writeValueAsString(userCheck));
                     resp.setHeader("access-control-expose-headers", "authToken");
                     resp.setHeader("authToken", String.valueOf(userCheck.getId()));
-
+//                    resp.setHeader("role", String.valueOf(userCheck.getRole()));
+                    System.out.println(userCheck.getId());
 
                 } else {
                     resp.setStatus(401);

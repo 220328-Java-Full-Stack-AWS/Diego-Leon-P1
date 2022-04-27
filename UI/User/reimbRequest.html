@@ -14,9 +14,9 @@
 
     <div class="container">
         <h1>Submision</h1>
-        <form>
+        <form >
             <div class="form-control">
-                <input type="text" id="amount" required>
+                <input type="number" id="amount" required>
                 <label>Amount</label>
             </div>
             <div class="form-control">
@@ -24,12 +24,12 @@
                 <label>Description</label>
             </div>
             <div class="form-control">
-                <input type="text" id="receipt" required>
+                <input type="number" id="receipt" required>
                 <label>Receipt Number</label>
             </div>
             <div class="form-control">
-                <label>Choose the type of requet: </label>
-                <select name="type" id="type">
+                <label>Choose the type of request: </label>
+                <select name="type" id="type" required>
                     <option value="" selected disabled hidden>Choose here</option>
                     <option value="1">Lodging</option>
                     <option value="2">Travel</option>
@@ -51,7 +51,6 @@
     <script>
         async function submitForm() {
 
-
             let newRequest = {
                 amount: document.getElementById("amount").value,
                 description: document.getElementById("description").value,
@@ -59,35 +58,18 @@
                 type: document.getElementById("type").value,
             }
 
-
-            console.log(newRequest);//fact finding
-
             //Make our asynchronous API call
             let response = await submitNewRequest(newRequest);
 
-            // console.log("Response: ", response);//fact finding
-            // console.log("Response JSON: ", response.json());//we should delete these later
 
             if (response.status == 201) {
-                /*
-                Here we are retyrieving the authToken header, which contains our username as
-                passed back from the server. This way we can use it to identify ourselves in 
-                subsequent API calls.
-                For this to work, you must send back a token in the header of the response
-                The key should match the shown key name "authToken" and the value should be
-                a string you can use to locally store information about the logged in user.
-                In this case we are getting a token that contains the username string, 
-                and storing it in localStorage.
-                */
-                // let token = response.headers.get("authToken");
-                // console.log("authToken received: ", token);//fact finding
-                // localStorage.setItem("authToken", token);
+
                 alert("Request Submitted!");
                 //navigate the window to the landing page
                 window.location.href = "./userLandingPage.html";
 
             } else {
-                alert("Unable to register!");
+                alert("Unable to submit, please complete the form !");
             }
         }
         function landingPage() {

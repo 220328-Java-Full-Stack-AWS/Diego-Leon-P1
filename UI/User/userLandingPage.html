@@ -10,10 +10,11 @@
     <title>User Reimbursement Submision</title>
 </head>
 
-<body>
+<body onload="firstTimeUser()">
 
     <div class="container">
         <h1>Welcome</h1>
+        <h2 id="newUser"></h2>
         <form>
 
             <div class="form-control">
@@ -37,6 +38,19 @@
 
 
     <script>
+
+        function firstTimeUser() {
+            let username = localStorage.getItem('username');
+            console.log(username)
+            if (username != null) {
+                let message = document.getElementById("newUser");
+                let text = document.createTextNode("Your username is: " + localStorage.getItem('username'));
+
+                message.appendChild(text);
+            }
+        }
+
+
         async function submitForm() {
 
             if (document.getElementById("type").value == 1) {
@@ -48,7 +62,7 @@
 
             }
             else {
-                alert("Unable to register!");
+                alert("No option selected. Please choose.");
             }
         }
 

@@ -12,6 +12,7 @@ async function submitNewRequest(newRequest) {
                 "Content-Type": "application/json",
                 'Accept': 'application/json',
                 'authToken': localStorage.getItem('authToken'),
+                'case': 1
 
             },
             body: JSON.stringify(newRequest)
@@ -84,6 +85,7 @@ async function updateRequest(updatedRequest) {
                 'Accept': 'application/json',
                 'authToken': localStorage.getItem('authToken'),
                 'reimbursement': localStorage.getItem('localID'),
+                'case': "1"
             },
             body: JSON.stringify(updatedRequest)
         }
@@ -93,3 +95,8 @@ async function updateRequest(updatedRequest) {
     return response;
 }
 
+function logOutUser() {
+
+    localStorage.clear();
+    window.location.href = "../index.html";
+}

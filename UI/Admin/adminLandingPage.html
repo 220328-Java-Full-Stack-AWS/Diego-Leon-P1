@@ -21,7 +21,7 @@
                 <select name="type" id="type">
                     <option value="" selected disabled hidden>Choose here</option>
                     <option value="1">View Requests</option>
-                    <option value="2">View my Pending and Completed Requests</option>
+                    <option value="2">Change User Role</option>
 
                 </select>
             </div>
@@ -38,14 +38,14 @@
 
             if (document.getElementById("type").value == 1) {
 
-                window.location.href = "./reimbRequest.html";
+                window.location.href = "./viewReimb.html";
 
             } else if (document.getElementById("type").value == 2) {
                 window.location.href = "./viewPending.html";
 
             }
             else {
-                alert("Unable to register!");
+                alert("No option selected.");
             }
         }
 

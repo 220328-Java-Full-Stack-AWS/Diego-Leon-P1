@@ -6,6 +6,8 @@
         <set>
           <option value="authToken" />
           <option value="username" />
+          <option value="role" />
+          <option value="access-control-expose-headers" />
         </set>
       </option>
     </inspection_tool>

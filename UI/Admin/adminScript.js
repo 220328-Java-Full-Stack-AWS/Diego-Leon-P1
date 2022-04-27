@@ -1,38 +1,20 @@
-let authServiceURl = "http://localhost:8080/Diego-Leon-P1/Reimbursement";
+let reimbURl = "http://localhost:8080/Diego-Leon-P1/Reimbursement";
+let userURl = "http://localhost:8080/Diego-Leon-P1/Reimbursement";
 
 
 
-async function submitNewRequest(newRequest) {
-
-    let response = await fetch(
-        authServiceURl,
-        {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                'Accept': 'application/json',
-                'authToken': localStorage.getItem('authToken'),
-
-            },
-            body: JSON.stringify(newRequest)
-        }
-    );
-
-    return response;
-}
-
-
-async function getPendingRequests() {
+async function getRequests(status) {
 
     let response = await fetch(
-        authServiceURl,
+        reimbURl,
         {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
                 'Accept': 'application/json',
                 'authToken': localStorage.getItem('authToken'),
-                'case': 1
+                'case': "2",
+                'status': status
             },
         }
     );
@@ -40,55 +22,21 @@ async function getPendingRequests() {
     return response;
 }
 
-
-async function deletingRequest(reimbID) {
-
-    let response = await fetch(
-        authServiceURl,
-        {
-            method: "DELETE",
-            headers: {
-                reimbursement: reimbID
-            },
-        }
-    );
-
-    return response;
-}
-
-
-async function getRequestbyID(reimbID) {
+async function processRequest(reimbId, status) {
 
     let response = await fetch(
-        authServiceURl,
-        {
-            method: "GET",
-            headers: {
-                case: 3,
-                reimbursement: reimbID
-            },
-        }
-    );
-
-    return response;
-}
-
-async function updateRequest(updatedRequest) {
-
-    let response = await fetch(
-        authServiceURl,
+        reimbURl,
         {
             method: "PUT",
             headers: {
                 'Content-Type': "application/json",
                 'Accept': 'application/json',
                 'authToken': localStorage.getItem('authToken'),
-                'reimbursement': localStorage.getItem('localID'),
+                'case': 2,
+                'reimbursement': reimbId,
+                'status': status
             },
-            body: JSON.stringify(updatedRequest)
         }
-
     );
-    localStorage.removeItem('localID')
     return response;
 }

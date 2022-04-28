@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
+    <link rel="stylesheet" href="userStyles.css">
+    <title>Pending Requests</title>
+</head>
+
+<body style="height: fit-content; overflow: scroll;">
+
+    <div class="container">
+        <h1>Pending Requests</h1>
+        <form>
+            <div class="form-control">
+                <label>Which requests would you like to see: </label>
+
+                <select name="type" id="status">
+                    <option value="" selected disabled hidden>Choose here</option>
+                    <option value="1">Pending Request</option>
+                    <option value="2">Approved Request</option>
+                    <option value="3">Denied Request</option>
+                </select>
+            </div>
+            <div class="form-control">
+
+                <div class="form-control">
+                    <button type="button" class="btn" onclick="generateTable()">Get Table</button>
+                    <p id="showData"></p>
+                </div>
+
+                <label>What would you like to do: </label>
+                <select name="type" id="type">
+                    <option value="" selected disabled hidden>Choose here</option>
+                    <option value="1">Edit Request</option>
+                    <option value="2">Cancel Request</option>
+                </select>
+
+            </div>
+            <div class="form-control">
+                <input type="text" id="reimbId" placeholder="Reimbursement ID" required>
+            </div>
+            <div class="form-control">
+                <button type="button" class="btn" onclick="submitForm()">Submit</button>
+            </div>
+            <div class="form-control">
+                <button type="button" class="btn" onclick="landingPage()">Home</button>
+            </div>
+
+        </form>
+    </div>
+
+
+    <script src="./userScript.js"></script>
+
+    <script>
+
+        async function generateTable() {
+            let status = parseInt(document.getElementById("status").value);
+            //let response = await getPendingRequests();
+            let response = await getRequestbyUserStatus(status);
+            //let list = response.json();
+            if (response.status == 200) {
+                alert("Table generated!");
+
+                response.json().then(data => {
+
+                    // EXTRACT VALUE FOR HTML HEADER. 
+                    // ('Book ID', 'Book Name', 'Category' and 'Price')
+                    var col = [];
+                    for (var i = 0; i < data.length; i++) {
+                        for (var key in data[i]) {
+                            if (col.indexOf(key) === -1) {
+                                col.push(key);
+                            }
+                        }
+                    }
+
+                    // CREATE DYNAMIC TABLE.
+                    var table = document.createElement("table");
+                    var tr = table.insertRow(-1);                   // TABLE ROW.
+
+                    for (var i = 0; i < col.length; i++) {
+                        var th = document.createElement("th");      // TABLE HEADER.
+                        th.innerHTML = col[i];
+                        tr.appendChild(th);
+                    }
+                    // ADD JSON DATA TO THE TABLE AS ROWS.
+                    for (var i = 0; i < data.length; i++) {
+
+                        tr = table.insertRow(-1);
+
+                        for (var j = 0; j < col.length; j++) {
+                            var tabCell = tr.insertCell(-1);
+                            tabCell.innerHTML = data[i][col[j]];
+                        }
+                    }
+
+                    // FINALLY ADD THE NEWLY CREATED TABLE WITH JSON DATA TO A CONTAINER.
+                    var divContainer = document.getElementById("showData");
+                    divContainer.innerHTML = "";
+                    divContainer.appendChild(table);
+
+
+                });
+
+
+            } else {
+                alert("Unable to generate table!");
+            }
+
+
+
+        }
+        async function submitForm() {
+
+            let isPending = 0;
+            let response = await getRequestbyUserStatus(1);
+            let reimbId = document.getElementById("reimbId").value;
+
+
+            response.json().then(data => {
+
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].id == reimbId) {
+                        isPending = 1;
+
+                    }
+                }
+
+                if (document.getElementById("type").value == 1 && isPending == 1) {
+
+                    localStorage.setItem("localID", document.getElementById("reimbId").value);
+
+                    window.location.href = "./reimbEdit.html";
+
+                } else if (document.getElementById("type").value == 2 && isPending == 1) {
+                    deletingRequest(document.getElementById("reimbId").value)
+
+                    alert("Request Cancelled");
+                }
+                else {
+                    alert("Unable to Cancel, Request not pending or does not exist!");
+                }
+            });
+        }
+
+
+        function landingPage() {
+
+            window.location.href = "./userLandingPage.html";
+        }
+
+    </script>
+</body>
+
+</html>

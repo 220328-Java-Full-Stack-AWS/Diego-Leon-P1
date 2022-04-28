@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
+    <link rel="stylesheet" href="styles.css">
+    <title>ERS Login</title>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Please Login</h1>
+        <form>
+            <div class="form-control">
+                <input type="text" id="username" required>
+                <label>Username</label>
+            </div>
+            <div class="form-control">
+                <input type="password" id="password" required>
+                <label>Password</label>
+            </div>
+
+            <input type="submit" class="btn" value="Login">
+
+
+            <div class="form-control">
+
+                <a href="./Auth/register.html" style="color:black;"> No account? Click here to Register.</a>
+            </div>
+
+        </form>
+    </div>
+
+
+    <script src="./script.js"></script>
+
+
+
+
+    <script>
+        const form = document.querySelector('form')
+        form.onsubmit = (e) => {
+            e.preventDefault()
+            submitForm()
+        }
+
+        async function submitForm() {
+
+            let newUser = {
+                username: document.getElementById("username").value,
+                password: document.getElementById("password").value,
+
+            }
+            let roleToken;
+
+          
+
+            //Make our asynchronous API call
+            let response = await logInUser(newUser);
+
+
+    
+            if (response.status == 200) {
+          
+                response.json().then(data => {
+                   
+                    roleToken = data.role;
+
+                    let token = response.headers.get("authToken");
+
+                    localStorage.setItem("authToken", token);
+               
+                    localStorage.setItem("role", roleToken);
+                    alert("Login Succesful.");
+                    // navigate the window to the landing page
+                    if (roleToken == 1) {
+                        window.location.href = "./Admin/adminLandingPage.html";
+                    } else {
+                        window.location.href = "./User/userLandingPage.html";
+                    }
+                })
+
+            } else {
+                alert("Unable to Log In! Username and/or Password do not match.");
+            }
+        }
+
+    </script>
+
+</body>
+
+</html>

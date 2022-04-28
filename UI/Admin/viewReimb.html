@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
+    <link rel="stylesheet" href="adminStyles.css">
+    <title>Pending Requests</title>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Requests</h1>
+        <form>
+
+            <div class="form-control">
+                <label>What would you like to do: </label>
+                <select name="type" id="status">
+                    <option value="" selected disabled hidden>Choose here</option>
+                    <option value="1">Filter by Pending</option>
+                    <option value="2">Filter by Approved</option>
+                    <option value="3">Filter by Denied</option>
+                </select>
+
+            </div>
+            <div class="form-control">
+                <button type="button" class="btn" onclick="generateTable()">Get Table</button>
+                <p id="showData"></p>
+            </div>
+            <div class="form-control">
+                <label>Approve or Deny: </label>
+                <select name="type" id="decision">
+                    <option value="" selected disabled hidden>Choose here</option>
+                    <option value="2">Approve</option>
+                    <option value="3">Deny</option>
+
+                </select>
+
+            </div>
+            <div class="form-control">
+                <input type="text" id="reimbId" placeholder="Reimbursement ID" required>
+            </div>
+            <button type="button" class="btn" onclick="submitForm()">Submit</button>
+
+            <div class="form-control">
+                <button type="button" class="btn" onclick="landingPage()">Home</button>
+            </div>
+
+        </form>
+    </div>
+
+
+    <script src="./adminScript.js"></script>
+
+    <script>
+
+        async function generateTable() {
+
+            let status = parseInt(document.getElementById("status").value);
+            let response = await getRequests(status);
+
+            if (response.status == 200) {
+
+                alert("Table generated!");
+
+                response.json().then(data => {
+
+                    var col = [];
+                    for (var i = 0; i < data.length; i++) {
+                        for (var key in data[i]) {
+                            if (col.indexOf(key) === -1) {
+                                col.push(key);
+                            }
+                        }
+                    }
+
+                    // CREATE DYNAMIC TABLE.
+                    var table = document.createElement("table");
+                    var tr = table.insertRow(-1);                   // TABLE ROW.
+
+                    for (var i = 0; i < col.length; i++) {
+                        var th = document.createElement("th");      // TABLE HEADER.
+                        th.innerHTML = col[i];
+                        tr.appendChild(th);
+                    }
+                    // ADD JSON DATA TO THE TABLE AS ROWS.
+                    for (var i = 0; i < data.length; i++) {
+
+                        tr = table.insertRow(-1);
+
+                        for (var j = 0; j < col.length; j++) {
+                            var tabCell = tr.insertCell(-1);
+                            tabCell.innerHTML = data[i][col[j]];
+                        }
+                    }
+
+                    // FINALLY ADD THE NEWLY CREATED TABLE WITH JSON DATA TO A CONTAINER.
+                    var divContainer = document.getElementById("showData");
+                    divContainer.innerHTML = "";
+                    divContainer.appendChild(table);
+
+                });
+
+
+            } else {
+                alert("Unable to generate table!");
+            }
+
+
+
+        }
+        async function submitForm() {
+
+            let status = document.getElementById("decision").value;
+            let reimbId = document.getElementById("reimbId").value;
+            let isPending = 0;
+
+            let response = await getRequests(1);
+            response.json().then(data => {
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].id == reimbId) {
+                        isPending = 1;
+                    }
+                }
+
+
+                if (status == 2 && isPending == 1) {
+                    processRequest(reimbId, status);
+                    alert("Reimbursement Approved")
+                } else if (status == 3 && isPending == 1) {
+                    processRequest(reimbId, status);
+                    alert("Reimbursement Denied")
+                }
+                else {
+                    alert("Unable to process request, request is not pending or does not exist!");
+                }
+            });
+        }
+
+
+        function landingPage() {
+
+            window.location.href = "./adminLandingPage.html";
+        }
+
+    </script>
+</body>
+
+</html>

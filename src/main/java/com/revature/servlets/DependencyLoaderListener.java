@@ -11,13 +11,17 @@ public class DependencyLoaderListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        conn = ConnectionFactory.getConnection();
+        try {
+            conn = ConnectionFactory.getConnection();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         System.out.println("Context is Initialized");
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        //ConnectionFactory.close();
+        ConnectionFactory.close();
         System.out.println("Context is destroyed");
 
     }

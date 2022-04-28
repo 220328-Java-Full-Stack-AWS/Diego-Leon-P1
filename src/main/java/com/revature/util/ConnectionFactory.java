@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -17,18 +18,18 @@ import java.util.Properties;
 public class ConnectionFactory {
 
     private static Connection connection;
-    private static ConnectionFactory connectionFactory;
+    //private static ConnectionFactory connectionFactory;
     //removed super();
     private ConnectionFactory() {
 
     }
 
-    public static ConnectionFactory getConnectionFactory() {
-            if (connectionFactory == null){
-                connectionFactory = new ConnectionFactory();
-            }
-            return connectionFactory;
-    }
+    //public static ConnectionFactory getConnectionFactory() {
+//            if (connectionFactory == null){
+//                connectionFactory = new ConnectionFactory();
+//            }
+//            return connectionFactory;
+   // }
 
     /**
      * <p>This method follows the Singleton Design Pattern to restrict this class to only having 1 instance.</p>
@@ -36,7 +37,7 @@ public class ConnectionFactory {
      *
      * {@code ConnectionFactory.getInstance()}
      */
-    public static Connection getConnection(){
+    public static Connection getConnection() throws ClassNotFoundException {
         if(connection == null) {
             connection = connect();
         }
@@ -48,26 +49,36 @@ public class ConnectionFactory {
      * <p>The {@link ConnectionFactory#connect()} method is responsible for leveraging a specific Database Driver to obtain an instance of the {@link java.sql.Connection} interface.</p>
      * <p>Typically, this is accomplished via the use of the {@link java.sql.DriverManager} class.</p>
      */
-    static Connection connect() {
+    static Connection connect() throws ClassNotFoundException {
 
 
-        Properties props = new Properties();
-        ClassLoader loader = Thread.currentThread().getContextClassLoader();
-        InputStream input = loader.getResourceAsStream("application.properties");
+
         try {
+            Class.forName("org.postgresql.Driver");
+
+            Properties props = new Properties();
+            ClassLoader loader = Thread.currentThread().getContextClassLoader();
+            InputStream input = loader.getResourceAsStream("application.properties");
             props.load(input);
 
 
             String connectionString = "jdbc:postgresql://" +
                     props.getProperty("hostname") + ":" +
                     props.getProperty("port") + "/" +
-                    props.getProperty("dbname");
+                    props.getProperty("dbname") + "?schemaName=" +
+                    props.getProperty("schemaName");
 
             String username = props.getProperty("username");
             String password = props.getProperty("password");
 
 
             connection = DriverManager.getConnection(connectionString, username, password);
+
+            String sql = "set search_path to \"$user\", public, test";
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.executeUpdate();
+
+
 
         } catch (IOException | SQLException e) {
             e.printStackTrace();
@@ -76,7 +87,12 @@ public class ConnectionFactory {
         return connection;
     }
 
-    public static void close() throws SQLException {
-        connection.close();
+    public static void close() {
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        connection = null;
     }
 }

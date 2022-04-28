@@ -1,5 +1,7 @@
 package com.revature.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.sql.Blob;
 import java.sql.Timestamp;
 
@@ -16,6 +18,7 @@ import java.sql.Timestamp;
  * </ul>
  *
  */
+@JsonIgnoreProperties
 public class Reimbursement extends AbstractReimbursement {
 
     public Reimbursement() {

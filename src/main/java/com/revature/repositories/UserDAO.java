@@ -2,6 +2,7 @@ package com.revature.repositories;
 
 import com.revature.models.User;
 import com.revature.util.ConnectionFactory;
+import org.postgresql.util.PSQLException;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -21,7 +22,7 @@ public class UserDAO {
     /**
      * Should retrieve a User from the DB with the corresponding username or an empty optional if there is no match.
      */
-    public Optional<User> getByUsername(String username) {
+    public User getByUsername(String username) {
         //should reference model here
         User model = new User();
 
@@ -32,7 +33,7 @@ public class UserDAO {
             preparedStatement.setString(1, username);
 
             ResultSet rs = preparedStatement.executeQuery();
-            //next has to be called. it is a boolean. if there is something there it returns true and false if not
+            //next has to be called. it is a boolean, if there is something there it returns true and false if not
 
             while(rs.next()){
                 model.setId(rs.getInt("ers_users_id"));
@@ -41,49 +42,17 @@ public class UserDAO {
                 model.setLast(rs.getString("user_last_name"));
                 model.setFirst(rs.getString("user_first_name"));
                 model.setEmail(rs.getString("user_email"));
-                //model.setRole();
-
-                // model.setRole(rs.getInt("user_role_id"));
+                model.setRole(rs.getInt("user_role_id"));
 
             }
         }catch (SQLException e){
             e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
-        return Optional.of(model);
-    }
 
-////    //get by ID
-////
-//    public Optional<User> getByID(int id) {
-//        //should reference model here
-//        User model = new User();
-//
-//        try {
-//            String SQL = "SELECT * FROM ers_users WHERE ers_users_id = ?";
-//            Connection connection = ConnectionFactory.getConnection();
-//            PreparedStatement preparedStatement = connection.prepareStatement(SQL);
-//            preparedStatement.setInt(1, id);
-//
-//            ResultSet rs = preparedStatement.executeQuery();
-//            //next has to be called. it is a boolean. if there is something there it returns true and false if not
-//
-//            while(rs.next()){
-//                model.setId(rs.getInt("ers_users_id"));
-//                model.setUsername(rs.getString("ers_username"));
-//                model.setPassword(rs.getString("ers_password"));
-//                model.setLast(rs.getString("user_last_name"));
-//                model.setFirst(rs.getString("user_first_name"));
-//                model.setEmail(rs.getString("user_email"));
-//                //model.setRole();
-//
-//                // model.setRole(rs.getInt("user_role_id"));
-//
-//            }
-//        }catch (SQLException e){
-//            e.printStackTrace();
-//        }
-//        return Optional.of(model);
-//    }
+        return model;
+    }
 
     /**
      * <ul>
@@ -92,11 +61,11 @@ public class UserDAO {
      *     <li>Should return a User object with an updated ID.</li>
      * </ul>
      */
-    public User register(User userToBeRegistered) {
+    public User register(User userToBeRegistered) throws ClassNotFoundException, SQLException {
         String SQL = "INSERT INTO ers_users (ers_username,ers_password,user_first_name,user_last_name," +
                 "user_email,user_role_id ) VALUES (?,?,?,?,?,?)";
 
-        try {
+
 
             PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(SQL);
             //ID is not set since it is set to Serial in the DB
@@ -111,18 +80,12 @@ public class UserDAO {
             preparedStatement.executeUpdate();
             //next has to be called. it is a boolean. if there is something there it returns true and false if not
 
-        }catch (SQLException e){
-            e.printStackTrace();
-            //throw new RegistrationUnsuccessfulException();
-        }
-
-
 
         return userToBeRegistered;
     }
 
 
-    public boolean login(String username, String password, User currentUser) throws SQLException, IOException {
+    public boolean login(String username, String password, User currentUser) throws SQLException, IOException, ClassNotFoundException {
 
         String SQL = "SELECT * FROM ers_users WHERE ers_username = ? ";
         Connection connection = ConnectionFactory.getConnection();
@@ -139,7 +102,7 @@ public class UserDAO {
             currentUser.setLast(rs.getString("user_last_name"));
             currentUser.setEmail(rs.getString("user_email"));
         }
-
+        System.out.println("Logged IN");
         return false;
     }
 

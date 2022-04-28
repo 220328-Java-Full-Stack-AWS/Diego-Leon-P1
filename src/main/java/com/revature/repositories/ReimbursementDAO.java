@@ -4,10 +4,7 @@ package com.revature.repositories;
 import com.revature.models.Reimbursement;
 import com.revature.util.ConnectionFactory;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -42,11 +39,9 @@ public class ReimbursementDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
-
-        System.out.println("ID: " + request.getId() + "\nAmount: " + request.getAmount() + "\nDate Submitted: "
-                + request.getSubmitted() + "\nDate Resolved: " + request.getResolved() + "\nDescription: " + request.getDescription()
-                + "\nReceipt Number: " + request.getReceipt() + "\nSubmitted by: " + request.getAuthor());
 
         return Optional.empty();
     }
@@ -54,6 +49,8 @@ public class ReimbursementDAO {
     ////GEt by userID
     public List<Reimbursement> getByUserId(int id) {
         List<Reimbursement> list = new LinkedList<>();
+
+
 
         try {
             String SQL = "SELECT * FROM ers_reimbursement WHERE reimb_author = ?";
@@ -76,9 +73,11 @@ public class ReimbursementDAO {
                 model.setStatus(rs.getInt("reimb_status_id"));
 
                 list.add(model);
-                System.out.println("List");
+
             }
         } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
 
@@ -110,27 +109,55 @@ public class ReimbursementDAO {
                 model.setResolved(rs.getTimestamp("reimb_resolved"));
                 model.setDescription(rs.getString("reimb_description"));
                 model.setReceipt(rs.getString("reimb_receipt"));
+                model.setResolver(rs.getInt("reimb_resolver"));
                 model.setAuthor(rs.getInt("reimb_author"));
                 model.setStatus(rs.getInt("reimb_status_id"));
+                model.setType(rs.getInt("reimb_type_id"));
 
                 list.add(model);
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
         return list;
     }
 
-    /**
-     * <ul>
-     *     <li>Should Update an existing Reimbursement record in the DB with the provided information.</li>
-     *     <li>Should throw an exception if the update is unsuccessful.</li>
-     *     <li>Should return a Reimbursement object with updated information.</li>
-     * </ul>
-     */
-    public Reimbursement update(Reimbursement unprocessedReimbursement) {
+    public List<Reimbursement> getByStatus(int status, int Id) {
+        List<Reimbursement> list = new LinkedList<>();
 
-        return null;
+        try {
+            String SQL = "SELECT * FROM ers_reimbursement WHERE reimb_status_id = ? AND reimb_author = ? ";
+            Connection connection = ConnectionFactory.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL);
+            preparedStatement.setInt(1, status);
+            preparedStatement.setInt(2, Id);
+
+            ResultSet rs = preparedStatement.executeQuery();
+            //next has to be called. it is a boolean. if there is something there it returns true and false if not
+
+            while (rs.next()) {
+                Reimbursement model = new Reimbursement();
+                model.setId(rs.getInt("reimb_id"));
+                model.setAmount(rs.getDouble("reimb_amount"));
+                model.setSubmitted(rs.getTimestamp("reimb_submitted"));
+                model.setResolved(rs.getTimestamp("reimb_resolved"));
+                model.setDescription(rs.getString("reimb_description"));
+                model.setReceipt(rs.getString("reimb_receipt"));
+                model.setResolver(rs.getInt("reimb_resolver"));
+                model.setAuthor(rs.getInt("reimb_author"));
+                model.setStatus(rs.getInt("reimb_status_id"));
+                model.setType(rs.getInt("reimb_type_id"));
+
+                list.add(model);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 
     public Reimbursement createRequest(Reimbursement requestTobeSubmitted) {
@@ -141,7 +168,7 @@ public class ReimbursementDAO {
 
             PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(SQL);
             preparedStatement.setDouble(1, requestTobeSubmitted.getAmount());
-            preparedStatement.setTimestamp(2, requestTobeSubmitted.getSubmitted());
+            preparedStatement.setString(2, requestTobeSubmitted.getSubmitted().toString());
             preparedStatement.setString(3, requestTobeSubmitted.getDescription());
             preparedStatement.setString(4, requestTobeSubmitted.getReceipt());
             preparedStatement.setInt(5, requestTobeSubmitted.getAuthor());
@@ -151,6 +178,8 @@ public class ReimbursementDAO {
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
 
@@ -178,6 +207,8 @@ public class ReimbursementDAO {
 
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
 
 
@@ -196,23 +227,29 @@ public class ReimbursementDAO {
 
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
 
         return requestTobeCancelled;
     }
 
-    public int process(int id, int status) {
-            String SQL = "UPDATE  ers_reimbursement SET reimb_status_id = ? WHERE reimb_id = ?";
+    public int process(int id, int status, int resolverId, Timestamp resolved) {
+            String SQL = "UPDATE  ers_reimbursement SET reimb_status_id = ?, reimb_resolver = ?, reimb_resolved = ?  WHERE reimb_id = ?";
 
         try {
 
             PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(SQL);
             preparedStatement.setInt(1, status);
-            preparedStatement.setInt(2, id);
+            preparedStatement.setInt(2, resolverId);
+            preparedStatement.setTimestamp(3, resolved);
+            preparedStatement.setInt(4, id);
 
             preparedStatement.executeUpdate();
-
+            System.out.println(preparedStatement.executeUpdate());
         } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
 

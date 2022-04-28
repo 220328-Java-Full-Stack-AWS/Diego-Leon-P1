@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
+    <link rel="stylesheet" href="userStyles.css">
+    <title>User Reimbursement Submision</title>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Update Submission</h1>
+        <form>
+            <div class="form-control">
+                <input type="text" id="amount" required>
+                <label>Amount </label>
+            </div>
+            <div class="form-control">
+                <input type="text" id="description" required>
+                <label>Description</label>
+            </div>
+            <div class="form-control">
+                <input type="text" id="receipt" required>
+                <label>Receipt Number</label>
+            </div>
+            <div class="form-control">
+                <label>Choose the type of requet: </label>
+                <select name="type" id="type">
+                    <option value="" selected disabled hidden>Choose here</option>
+                    <option value="1">Lodging</option>
+                    <option value="2">Travel</option>
+                    <option value="3">Food</option>
+                </select>
+            </div>
+            <div class="form-control">
+                <button type="button" class="btn" onclick="submitForm()">Submit</button>
+            </div>
+            <div class="form-control">
+                <button type="button" class="btn" onclick="landingPage()">Home</button>
+            </div>
+        </form>
+    </div>
+
+
+    <script src="./userScript.js"></script>
+
+    <script>
+        async function submitForm() {
+
+
+            let updatedRequest = {
+                amount: document.getElementById("amount").value,
+                description: document.getElementById("description").value,
+                receipt: document.getElementById("receipt").value,
+                type: document.getElementById("type").value,
+            }
+
+
+
+            //Make our asynchronous API call
+            let response = await updateRequest(updatedRequest);
+
+
+            if (response.status == 200) {
+
+                alert("Request Updated Successfully!");
+
+                window.location.href = "./viewPending.html";
+
+            } else {
+                alert("Unable to edit!");
+            }
+        }
+
+        function landingPage() {
+
+            window.location.href = "./userLandingPage.html";
+        }
+
+
+    </script>
+</body>
+
+</html>

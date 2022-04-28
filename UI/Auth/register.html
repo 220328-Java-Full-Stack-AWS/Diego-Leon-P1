@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
+    <link rel="stylesheet" href="styles.css">
+    <title>ERS Registration</title>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Register</h1>
+
+        <form>
+            <div class="form-control">
+                <input type="text" id="fname" required>
+                <label>First Name</label>
+            </div>
+            <div class="form-control">
+                <input type="text" id="lname" required>
+                <label>Last Name</label>
+            </div>
+            <div class="form-control">
+                <input type="email" id="email" pattern=".+@revature\.net" size="30" required>
+                <label>Enter Your revature.net Email</label>
+            </div>
+            <div class="form-control">
+                <input type="password" id="password" required>
+                <label>Password</label>
+            </div>
+            <input type="submit" class="btn" value=" Register">
+
+        </form>
+    </div>
+
+
+
+
+    <script src="./authScript.js"></script>
+
+    <script>
+        const form = document.querySelector('form')
+        form.onsubmit = (e) => {
+            e.preventDefault()
+            submitForm()
+        }
+
+        async function submitForm() {
+
+
+            let newUser = {
+                first: document.getElementById("fname").value,
+                last: document.getElementById("lname").value,
+                email: document.getElementById("email").value,
+                password: document.getElementById("password").value,
+            }
+
+
+
+            //Make our asynchronous API call
+            let response = await registerNewUser(newUser);
+
+
+            if (response.status == 201) {
+                response.json().then(data => {
+                    let username = data.username;
+
+
+                    alert("User Registration Succesful.")
+                    let token = response.headers.get("authToken");
+                    localStorage.setItem("authToken", token);
+                    localStorage.setItem("username", username);
+
+                    //navigate the window to the landing page
+                    window.location.href = "../User/userLandingPage.html";
+                })
+            } else if (response.status == 406) {
+                alert("Email Adress already in use.")
+            } else {
+                alert("User Registration Failed.")
+            }
+
+        }
+
+    </script>
+</body>
+
+</html>

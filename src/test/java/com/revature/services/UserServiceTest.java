@@ -37,7 +37,7 @@ public class UserServiceTest {
 
     @Test
     public void testGetByUsernamePassesWhenUsernameExists() throws SQLException, IOException {
-        when(userDAO.getByUsername(anyString())).thenReturn(Optional.of(GENERIC_EMPLOYEE_1));
+        //when(userDAO.getByUsername(anyString())).thenReturn(Optional.of(GENERIC_EMPLOYEE_1));
 
         assertEquals(Optional.of(GENERIC_EMPLOYEE_1), userService.getByUsername(GENERIC_EMPLOYEE_1.getUsername()));
 

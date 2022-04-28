@@ -41,7 +41,7 @@ public class AuthService {
      *
      * @return
      */
-    public boolean login(String username, String password) throws SQLException, IOException {
+    public boolean login(String username, String password) throws SQLException, IOException, ClassNotFoundException {
 
         dao = new UserDAO();
         dao.login(username, password, currentUser);
@@ -68,22 +68,9 @@ public class AuthService {
      * Note: userToBeRegistered will have an id=0, additional fields may be null.
      * After registration, the id will be a positive integer.
      */
-    public User register(User userToBeRegistered) throws SQLException, IOException {
+    public User register(User userToBeRegistered) throws SQLException, IOException, ClassNotFoundException {
         dao = new UserDAO();
 
-        Scanner myObj = new Scanner(System.in);  // Create a Scanner object
-
-        System.out.println("Enter First name: ");
-        userToBeRegistered.setFirst(myObj.nextLine());// Read user input
-
-        System.out.println("Enter Last name: ");
-        userToBeRegistered.setLast(myObj.nextLine());
-
-        System.out.println("Enter email: ");
-        userToBeRegistered.setEmail(myObj.nextLine()); // Read user input
-
-        System.out.println("Enter password: ");
-        userToBeRegistered.setPassword(myObj.nextLine());
 
         Random rand = new Random();
         int id = (int) (1000 + (Math.random() * 10000));
@@ -92,11 +79,9 @@ public class AuthService {
         userToBeRegistered.setId(id);
         userToBeRegistered.setUsername(userName);
 
-//			System.out.println("Enter role: ");
-//			userToBeRegistered.setRole(myObj.nextLine());
+        dao.register(userToBeRegistered);
 
-        return dao.register(userToBeRegistered);
-
+        return userToBeRegistered;
 
     }
 
@@ -105,11 +90,9 @@ public class AuthService {
      * It leverages the Optional type which is a useful interface to handle the
      * possibility of a user being unavailable.
      */
-    public Optional<User> retrieveCurrentUser() throws SQLException {
+    public User retrieveCurrentUser() throws SQLException, ClassNotFoundException {
 
 
-//        String SQL = "SELECT * FROM ers_users eu INNER JOIN ers_user_roles eur\n" +
-//                "ON eur.ers_user_role_id = eu.user_role_id WHERE eu.ers_username = ?";
         String SQL = "SELECT * FROM ers_users WHERE ers_username = ? ";
         Connection connection = ConnectionFactory.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(SQL);
@@ -128,6 +111,6 @@ public class AuthService {
 
         }
 
-        return Optional.of(currentUser);
+        return currentUser;
     }
 }

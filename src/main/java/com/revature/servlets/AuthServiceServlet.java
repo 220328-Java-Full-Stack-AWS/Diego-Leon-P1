@@ -62,22 +62,29 @@ public class AuthServiceServlet extends HttpServlet {
         int choice = Integer.parseInt(req.getHeader("case"));
         switch (choice) {
             case 1:
+                user = mapper.readValue(req.getInputStream(), User.class);
                 try {
-                    user = mapper.readValue(req.getInputStream(), User.class);
+
                     user = authService.register(user);
                     userCheck = userService.getByUsername(user.getUsername());
                     resp.getWriter().print(new ObjectMapper().writeValueAsString(user));
                     resp.setHeader("access-control-expose-headers", "authToken");
                     resp.setHeader("authToken", String.valueOf(userCheck.getId()));
-                } catch (SQLException e) {
+
+                }catch (PSQLException e){
                     System.out.println("in exception");
                     resp.setStatus(406);
                     e.printStackTrace();
-                    return;
+                }
+                catch (SQLException e) {
+                    e.printStackTrace();
+
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
-                resp.setStatus(201);
+                if (resp.getStatus() != 406) {
+                    resp.setStatus(201);
+                }
                 break;
             case 2:
 

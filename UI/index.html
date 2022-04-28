@@ -57,34 +57,23 @@
             }
             let roleToken;
 
-            console.log(newUser);//fact finding
+          
 
             //Make our asynchronous API call
             let response = await logInUser(newUser);
 
 
-            // console.log("Response: ", response);//fact finding
-            // console.log("Response JSON: ", response.json());//we should delete these later
-
+    
             if (response.status == 200) {
-                /*
-                Here we are retyrieving the authToken header, which contains our username as
-                passed back from the server. This way we can use it to identify ourselves in 
-                subsequent API calls.
-                For this to work, you must send back a token in the header of the response
-                The key should match the shown key name "authToken" and the value should be
-                a string you can use to locally store information about the logged in user.
-                In this case we are getting a token that contains the username string, 
-                and storing it in localStorage.
-                */
+          
                 response.json().then(data => {
-                    console.log(data.role);
+                   
                     roleToken = data.role;
-
 
                     let token = response.headers.get("authToken");
 
                     localStorage.setItem("authToken", token);
+               
                     localStorage.setItem("role", roleToken);
                     alert("Login Succesful.");
                     // navigate the window to the landing page

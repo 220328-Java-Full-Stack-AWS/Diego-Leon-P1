@@ -45,22 +45,8 @@ public class UserService {
 
 		User model = user.getByUsername(username);
 
-//		System.out.println("ID: "+ model.getId() + "\nUsername: : " + model.getUsername() + "\nPassword: " + model.getPassword()
-//				+ "\nName: " + model.getFirst() + " " + model.getLast() + "\nEmail: " + model.getEmail()
-//				+ "\nRole: " + model.getRole());
-
 		return model;
 	}
 
-//	public Optional<Object> getByID(int id) throws SQLException, IOException {
-//		//UserDAO user = new UserDAO();
-//		Optional<User> model = this.user.getByID(id);
-//
-//		System.out.println("ID: "+ model.get().getId() + "\nUsername: : " + model.get().getUsername() + "\nPassword: " + model.get().getPassword()
-//				+ "\nName: " + model.get().getFirst() + " " + model.get().getLast() + "\nEmail: " + model.get().getEmail()
-//				+ "\nRole: " + model.get().getRole());
-//
-//		return Optional.of(model);
-//	}
 
 }

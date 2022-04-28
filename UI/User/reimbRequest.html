@@ -10,14 +10,14 @@
     <title>User Reimbursement Submision</title>
 </head>
 
-<body>
+<body style="height: fit-content; overflow: scroll;">
 
     <div class="container">
         <h1>Submision</h1>
-        <form >
+        <form>
             <div class="form-control">
                 <input type="number" id="amount" required>
-                <label>Amount</label>
+                <label>Amount (Round Up)</label>
             </div>
             <div class="form-control">
                 <input type="text" id="description" required>
@@ -58,6 +58,7 @@
                 type: document.getElementById("type").value,
             }
 
+    
             //Make our asynchronous API call
             let response = await submitNewRequest(newRequest);
 
@@ -74,7 +75,6 @@
         }
         function landingPage() {
 
-            localStorage.clear();
             window.location.href = "./userLandingPage.html";
         }
 

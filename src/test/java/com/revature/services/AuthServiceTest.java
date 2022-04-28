@@ -57,7 +57,7 @@ public class AuthServiceTest {
 	}
 
 	@Test
-	public void testRegisterFailsWhenRegistrationIsUnsuccessful() {
+	public void testRegisterFailsWhenRegistrationIsUnsuccessful() throws SQLException, ClassNotFoundException {
 		when(userDAO.register(anyObject())).thenThrow(new RegistrationUnsuccessfulException());
 
 		assertThrows(RegistrationUnsuccessfulException.class,

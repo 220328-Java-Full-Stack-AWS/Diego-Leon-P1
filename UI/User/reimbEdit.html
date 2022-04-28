@@ -17,7 +17,7 @@
         <form>
             <div class="form-control">
                 <input type="text" id="amount" required>
-                <label>Amount</label>
+                <label>Amount </label>
             </div>
             <div class="form-control">
                 <input type="text" id="description" required>
@@ -60,7 +60,6 @@
             }
 
 
-            console.log(updatedRequest);//fact finding
 
             //Make our asynchronous API call
             let response = await updateRequest(updatedRequest);
@@ -68,7 +67,7 @@
 
             if (response.status == 200) {
 
-                alert("Request Submitted!");
+                alert("Request Updated Successfully!");
 
                 window.location.href = "./viewPending.html";
 
@@ -79,7 +78,6 @@
 
         function landingPage() {
 
-            localStorage.clear();
             window.location.href = "./userLandingPage.html";
         }
 

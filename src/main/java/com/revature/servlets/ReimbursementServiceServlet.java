@@ -65,6 +65,13 @@ public class ReimbursementServiceServlet extends HttpServlet {
                 resp.getWriter().write(json2);
                 resp.setStatus(200);
                 break;
+            case 3:
+                list = service.getReimbursementsByStatus(Integer.parseInt(req.getHeader("status")),Integer.parseInt(req.getHeader("authToken")) );
+                String json3 = mapper.writeValueAsString(list);
+                resp.setContentType("application/json");
+                resp.getWriter().write(json3);
+                resp.setStatus(200);
+                break;
         }
 
 
@@ -73,10 +80,10 @@ public class ReimbursementServiceServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         System.out.println("before Mapper");
-        model = new ObjectMapper().readValue(req.getInputStream(), Reimbursement.class);
-        model.setAuthor(Integer.parseInt(req.getHeader("authToken")));
-        try {
 
+        try {
+            model = new ObjectMapper().readValue(req.getInputStream(), Reimbursement.class);
+            model.setAuthor(Integer.parseInt(req.getHeader("authToken")));
             service.request(model);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -124,6 +131,7 @@ public class ReimbursementServiceServlet extends HttpServlet {
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("in Delete");
        int ID = Integer.parseInt(req.getHeader("reimbursement"));
         try {
             service.cancelByID(ID);

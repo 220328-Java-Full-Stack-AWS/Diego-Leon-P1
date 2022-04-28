@@ -55,7 +55,10 @@ public class ReimbursementService {
 
     public int process(int id, int status, int resolverId) {
         ReimbursementDAO request = new ReimbursementDAO();
-        request.process(id, status, resolverId);
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
+
+        request.process(id, status, resolverId, timestamp);
 
         return id;
     }
@@ -70,6 +73,14 @@ public class ReimbursementService {
 
         return list;
     }
+    public List<Reimbursement> getReimbursementsByStatus(int status, int Id) {
+        ReimbursementDAO request = new ReimbursementDAO();
+        List<Reimbursement> list;
+        list = request.getByStatus(status, Id);
+
+        return list;
+    }
+
 
 
     public Reimbursement request(Reimbursement requestTobeSubmitted) throws SQLException, IOException {

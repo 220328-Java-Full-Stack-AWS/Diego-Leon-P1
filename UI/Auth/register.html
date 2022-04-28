@@ -52,7 +52,6 @@
         async function submitForm() {
 
 
-            console.log("Submitted Form")
             let newUser = {
                 first: document.getElementById("fname").value,
                 last: document.getElementById("lname").value,
@@ -61,36 +60,30 @@
             }
 
 
-            console.log(newUser);//fact finding
 
             //Make our asynchronous API call
             let response = await registerNewUser(newUser);
 
-            response.json().then(data => {
-                console.log(data.username);
-                let username = data.username;
 
-                // console.log("Response: ", response);//fact finding
-                // console.log("Response JSON: ", response.json());//we should delete these later
+            if (response.status == 201) {
+                response.json().then(data => {
+                    let username = data.username;
 
-                if (response.status == 201) {
-                    alert("form submitted")
+
+                    alert("User Registration Succesful.")
                     let token = response.headers.get("authToken");
-                    console.log("authToken received: ", token);//fact finding
                     localStorage.setItem("authToken", token);
                     localStorage.setItem("username", username);
 
                     //navigate the window to the landing page
                     window.location.href = "../User/userLandingPage.html";
+                })
+            } else if (response.status == 406) {
+                alert("Email Adress already in use.")
+            } else {
+                alert("User Registration Failed.")
+            }
 
-
-                } else if (response.status == 406) {
-                    alert("Email Adress already in use.")
-                }
-                else {
-                    alert("Unable to submit Request!");
-                }
-            })
         }
 
     </script>

@@ -28,6 +28,9 @@
             <button type="button" class="btn" onclick="submitForm()">Submit</button>
 
         </form>
+        <div class="form-control">
+            <button type="button" class="btn" onclick="logOutUser()">Logout</button>
+        </div>
     </div>
 
 
@@ -47,6 +50,11 @@
             else {
                 alert("No option selected.");
             }
+        }
+        function logOutUser() {
+
+            localStorage.clear();
+            window.location.href = "../index.html";
         }
 
     </script>

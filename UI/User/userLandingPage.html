@@ -41,7 +41,7 @@
 
         function firstTimeUser() {
             let username = localStorage.getItem('username');
-            console.log(username)
+          
             if (username != null) {
                 let message = document.getElementById("newUser");
                 let text = document.createTextNode("Your username is: " + localStorage.getItem('username'));

@@ -49,7 +49,7 @@ async function deletingRequest(reimbID) {
         {
             method: "DELETE",
             headers: {
-                reimbursement: reimbID
+                'reimbursement': reimbID
             },
         }
     );
@@ -58,15 +58,16 @@ async function deletingRequest(reimbID) {
 }
 
 
-async function getRequestbyID(reimbID) {
+async function getRequestbyUserStatus(status) {
 
     let response = await fetch(
         reimbServiceURl,
         {
             method: "GET",
             headers: {
-                case: 3,
-                reimbursement: reimbID
+                'case': '3',
+                'status': status,
+                'authToken': localStorage.getItem('authToken'),
             },
         }
     );
